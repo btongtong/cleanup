@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spell Checker</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .highlight {    /* 변경된 부분 색깔로 차이주기 */
+            background-color: skyblue; 
+            font-weight: bold; 
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('#checkButton').click(function() {
+                var text = $('#inputText').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/check_spell',
+                    data: {text: text},
+                    success: function(response) {
+                        if (response.success) {
+                            var data = response.data;
+                            var correctedText = text;
+
+                            // 틀린 단어 바꾸기
+                            data.forEach(function(error) {
+                                var orgStr = error['orgStr'];
+                                var candWord = error['candWord'];
+                                correctedText = correctedText.replace(orgStr, function() {
+                                    return '<span class="highlight">' + candWord + '</span>';
+                                });
+                            });
+
+                            $('#outputText').html(correctedText);
+                        } else {
+                            alert('Failed to check spelling.');
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to check spelling. Please try again later.');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Spell Checker</h2>
+    <textarea id="inputText" rows="10" cols="80"></textarea><br><br>
+    <button id="checkButton">Check Spelling</button><br><br>
+    <h2>Corrected Text:</h2>
+    <div id="outputText" style="white-space: pre-wrap;"></div>
+</body>
+</html>
