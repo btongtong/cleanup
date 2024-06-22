@@ -1,178 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Spell Checker</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        .highlight {    /* 변경된 부분 색깔로 차이주기 */
-            background-color: skyblue; 
-            font-weight: bold; 
-        }
-    </style>
-    <script>
-        $(document).ready(function() {
-            $('#checkButton').click(function() {
-                var text = $('#inputText').val();
-                $.ajax({
-                    type: 'POST',
-                    url: '/check_spell',
-                    data: {text: text},
-                    success: function(response) {
-                        if (response.success) {
-                            var data = response.data;
-                            var correctedText = text;
+{% extends "base.html" %} 
 
-                            // 틀린 단어 바꾸기
-                            data.forEach(function(error) {
-                                var orgStr = error['orgStr'];
-                                var candWord = error['candWord'];
-                                correctedText = correctedText.replace(orgStr, function() {
-                                    return '<span class="highlight">' + candWord + '</span>';
-                                });
-                            });
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock extra_css %}
 
-                            $('#outputText').html(correctedText);
-                        } else {
-                            alert('Failed to check spelling.');
-                        }
-                    },
-                    error: function() {
-                        alert('Failed to check spelling. Please try again later.');
-                    }
-                });
-            });
+{% block content %}
+    <div class="content">
+        <section class="function">
+            <button id="checkButton">맞춤법</button>
+            <button id="tilde">~</button>
+            <button id="english">(eng)</button>
+            <button id="quote">“ ”</button>
+            <button id="smallQuote">‘ ’</button>
+            <button id="comma">,</button>
+            <button id="exclamation">!</button>
+            <button id="bracket">()</button>
+            <button id="triangleBrackets"><></button>
+            <button id="ellipsis">…</button>
+            <button id="cornerBracket">「」</button>
+            <button id="wrapTextButton">선택()</button>
+        </section>
+        <section class="original-text">
+            <div class="title">수정 전</div>
+            <textarea id="inputText"></textarea>
+        </section>
+        <section class="corrected-text">
+            <div class="title">수정 후</div>
+            <div id="outputText"></div>
+        </section>
 
-            $('#tilde').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace(/∼/g, '~');
-                $('#outputText').text(text);
-            })
+    </div>
+{% endblock content %}
 
-            $('#comma').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace(/，/g, ',');
-                $('#outputText').text(text);
-            })
-
-            $('#exclamation').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace(/！/g, '!');
-                $('#outputText').text(text);
-            })
-
-            $('#bracket').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace(/（/g, '(');
-                text = text.replace(/）/g, ')');
-                $('#outputText').text(text);
-            })
-
-            $('#triangleBrackets').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace(/</g, '〈');
-                text = text.replace(/>/g, '〉');
-                $('#outputText').text(text);
-            })
-
-            $('#ellipsis').click(function() {
-                var text = $('#inputText').val();
-                text = text.replace('···', '…');
-                text = text.replace('...', '…');
-                $('#outputText').text(text);
-            })
-
-            $('#english').click(function() {
-                var text = $('#inputText').val();
-
-                // 정규식으로 문장을 나누기
-                var sentences = text.split(/(\.|\!|\?|\n)/g);
-                
-                // 각 문장 내의 영어 단어를 괄호로 묶기
-                for (let i = 0; i < sentences.length; i++) {
-                    if (!sentences[i].match(/(\.|\!|\?|\n)/g)) {
-                        sentences[i] = sentences[i].replace(/\b([a-zA-Z\s,]+)\b/g, function(match) {
-                            return '(' + match.trim() + ')';
-                        });
-                    }
-                }
-                
-                // 문장들을 다시 합치기
-                var result = sentences.join('');
-                $('#outputText').text(result);
-            })
-
-            $('#quote').click(function() {
-                var text = $('#inputText').val();
-                let result = '';
-                let inQuote = false;
-
-                for (let i = 0; i < text.length; i++) {
-                    if (text[i] === '“') {
-                        result += '“';
-                        inQuote = true;
-                    } else if (text[i] === '”') {
-                        result += '”'
-                        inQuote = false;
-                    } else if (text[i] === '"') {
-                        result += (inQuote) ? '”' : '“'
-                        inQuote = !inQuote;
-                    } else {
-                        result += text[i];
-                    }
-                }
-                $('#outputText').text(result);
-            })
-            $('#smallQuote').click(function() {
-                var text = $('#inputText').val();
-                let result = '';
-                let inQuote = false;
-
-                for (let i = 0; i < text.length; i++) {
-                    if (text[i] === '‘') {
-                        result += '‘';
-                        inQuote = true;
-                    } else if (text[i] === '’') {
-                        if(i !== 0 && i != text.length-1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                            result += '\'';
-                        } else {
-                            result += '’'
-                            inQuote = false;
-                        }
-                    } else if (text[i] === '\'') {
-                        if(i !== 0 && i != text.length-1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                            result += '\'';
-                        } else {
-                            result += (inQuote) ? '’' : '‘'
-                            inQuote = !inQuote;
-                        }
-                    } else {
-                        result += text[i];
-                    }
-                }
-                $('#outputText').text(result);
-            })
-        });
-
-    </script>
-</head>
-<body>
-    <h2>Spell Checker</h2>
-    <button id="tilde"> tilde버튼입니다~</button>
-    <button id="english">english 버튼입니다</button>
-    <button id="quote">quote 버튼입니다</button>
-    <button id="smallQuote">smallQuote 버튼입니다</button>
-    <button id="comma">comma 버튼입니다</button>
-    <button id="exclamation">exclamation 버튼입니다</button>
-    <button id="bracket">bracket 버튼입니다</button>
-    <button id="triangleBrackets">triangleBrackets 버튼입니다</button>
-    <button id="ellipsis">ellipsis 버튼입니다</button>
-    <div></div>
-    <textarea id="inputText" rows="10" cols="80"></textarea><br><br>
-    <button id="checkButton">Check Spelling</button><br><br>
-    <h2>Corrected Text:</h2>
-    <div id="outputText" style="white-space: pre-wrap;"></div>
-</body>
-</html>
-
-
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock extra_js %}

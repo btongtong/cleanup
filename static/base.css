@@ -1,0 +1,140 @@
+/* All */
+:root{
+    /* Color */
+    --white-color: #fff;
+    --black-color: #140a00;
+    --blue-dark-color: #1d2a3c;
+    --grey-dark-color: #657380;
+    --grey-middle-color: #dce1e5;
+    --grey-light-color: #f9fafb;
+    
+    /* Size */
+    --padding: 16px;
+    --min-width: 700px;
+    --max-width: 1200px;
+    
+    /* Font Size */
+    --font-extra-large: 24px;
+    --font-large: 20px;
+    --font-medium: 15px;
+    --font-small: 12px;
+
+    /* Font Weight */
+    --font-heavy: 600;
+    --font-medium-weight: 500;
+    --font-light: 400;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Inter, "Noto Sans KR", sans-serif;
+    font-weight: var(--font-medium-weight);
+}
+
+button:focus,
+button:active,
+textarea:focus,
+textarea:active,
+input:focus,
+input:active {
+  box-shadow: none;
+  outline: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Header */
+header{
+    border-bottom: 1px solid var(--grey-middle-color);
+}
+
+.header-container{
+    margin: 0 auto;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: var(--padding);
+    
+    height: 65px;
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+
+    font-size: var(--font-large);
+    font-weight: var(--font-heavy);
+
+    color: var(--blue-dark-color);
+}
+
+header .logo i{
+    font-size: var(--font-extra-large);
+    padding-right: calc(var(--padding)/2);
+}
+
+.title.blink {
+    display: inline-block;
+    margin: -3px;
+    font-weight: 250;
+
+    animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    10%, 50% {
+        visibility: hidden;
+    }
+}
+
+header .menu {
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    color: var(--grey-dark-color);
+}
+
+header .menu:hover {
+    color: var(--blue-dark-color);
+    font-weight: var(--font-heavy);
+}
+
+/* Footer */
+footer{
+    border-top: 1px solid var(--grey-middle-color);
+    
+    color: var(--grey-dark-color);
+
+    background-color: var(--grey-light-color);
+}
+
+.footer-container{
+    margin: 0 auto;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: var(--padding);
+    
+    height: 150px;
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+}
+
+footer a, footer p{
+    font-size: var(--font-medium);
+    color: var(--grey-dark-color);
+    text-decoration: none;
+}

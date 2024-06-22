@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clean up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    {% block extra_css %}
+    {% endblock extra_css %}
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-arrow-pointer"></i>
+                <span class="title">CLEAN UP</span>
+                <span class="title blink">|</span>
+            </div>
+            <div class="menu">
+                <span class="inquiry">집단지성</span>
+            </div>
+        </div>
+    </header>
+    {% block content %}
+    {% endblock content %}
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Your Company. All rights reserved.</p>
+            <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/bf37951062.js" crossorigin="anonymous"></script>
+
+    {% block extra_js %}
+    {% endblock extra_js %}
+</body>
+</html>
