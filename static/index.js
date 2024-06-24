@@ -5,12 +5,12 @@ $(document).ready(function () {
         return highlightedText.replace(/\n/g, '<br>');
     }
 
-    $('#checkButton').click(function () {
+    $('#grammar').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
         $.ajax({
             type: 'POST',
-            url: '/check_spell',
+            url: '/check-spell',
             data: { text: text },
             success: function (response) {
                 if (response.success) {
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
-    $('#triangleBrackets').click(function () {
+    $('#triangleBracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/</g, '〈').replace(/>/g, '〉').replace(/〈/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
@@ -72,16 +72,10 @@ $(document).ready(function () {
 
     $('#english').click(function () {
         var text = $('#inputText').val();
-        var sentences = text.split(/(\.|\!|\?|\n)/g);
-        for (let i = 0; i < sentences.length; i++) {
-            if (!sentences[i].match(/(\.|\!|\?|\n)/g)) {
-                sentences[i] = sentences[i].replace(/\b([a-zA-Z\s,]+)\b/g, function (match) {
-                    return '<span class="origin">' + match.trim() + '</span><span class="highlight">(' + match.trim() + ')</span>';
-                });
-            }
-        }
-        var result = sentences.join('');
-        $('#outputText').html(result.replace(/\n/g, '<br>'));
+        var newText = text.replace(/\b([a-zA-Z\s,]+)\b/g, function(match) {
+            return '<span class="origin">' + match.trim() + '</span><span class="highlight">(' + match.trim() + ')</span>';
+        });
+        $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
     $('#quote').click(function () {
@@ -92,18 +86,14 @@ $(document).ready(function () {
         for (let i = 0; i < text.length; i++) {
             if (text[i] === '“') {
                 result += '<span class="origin">' + text[i] + '</span>';
-
-                if (i != 0 && text[i] != ' ') result += ' ';
                 result += '<span class="highlight">“</span>';
                 inQuote = true;
             } else if (text[i] === '”') {
                 result += '<span class="origin">' + text[i] + '</span>';
-
                 result += '<span class="highlight">”</span>';
                 inQuote = false;
             } else if (text[i] === '"') {
                 result += '<span class="origin">' + text[i] + '</span>';
-
                 result += (inQuote) ? '<span class="highlight">”</span>' : '<span class="highlight">“</span>';
                 inQuote = !inQuote;
             } else {
@@ -121,15 +111,13 @@ $(document).ready(function () {
         for (let i = 0; i < text.length; i++) {
             if (text[i] === '‘') {
                 result += '<span class="origin">' + text[i] + '</span>';
-
-                if (i != 0 && text[i] != ' ') result += ' ';
                 result += '<span class="highlight">‘</span>';
                 inQuote = true;
             } else if (text[i] === '’') {
                 result += '<span class="origin">' + text[i] + '</span>';
 
                 if (i !== 0 && i != text.length - 1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                    result += '\'';
+                    result += '<span class="highlight">&#39;</span>';
                 } else {
                     result += '<span class="highlight">’</span>';
                     inQuote = false;
@@ -138,7 +126,7 @@ $(document).ready(function () {
                 result += '<span class="origin">' + text[i] + '</span>';
 
                 if (i !== 0 && i != text.length - 1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                    result += '<span class="highlight">&#39;<span>';
+                    result += '<span class="highlight">&#39;</span>';
                 } else {
                     result += (inQuote) ? '<span class="highlight">’</span>' : '<span class="highlight">‘</span>';
                     inQuote = !inQuote;
@@ -152,29 +140,16 @@ $(document).ready(function () {
 
     $('#cornerBracket').click(function () {
         var text = $('#inputText').val();
-        let result = '';
-        let inQuote = false;
-
-        for (let i = 0; i < text.length; i++) {
-            if (text[i] === 'r' || text[i] === '厂' || text[i] === '■') {
-                result += '<span class="origin">' + text[i] + '</span>';
-
-                if (i != 0 && text[i] != ' ') result += ' ';
-                result += '<span class="highlight">「</span>';
-                inQuote = true;
-            } else if (text[i] === 'J' || text[i] === 'j' || text[i] === '丄' || text[i] === '□') {
-                result += '<span class="origin">' + text[i] + '</span>';
-
-                result += '<span class="highlight">」</span>';
-                inQuote = false;
-            } else {
-                result += text[i];
-            }
-        }
+        var result = text.replace(/[r厂■]/g, function(match) {
+            return '<span class="origin">' + match + '</span><span class="highlight">「</span>';
+        }).replace(/[Jj丄□]/g, function(match) {
+            return '<span class="origin">' + match + '</span><span class="highlight">」</span>';
+        });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
+    
 
-    $('#wrapTextButton').click(function () {
+    function wrapTextWithBrackets(leftBracket, rightBracket) {
         var textarea = $('#inputText')[0];
         var start = textarea.selectionStart;
         var end = textarea.selectionEnd;
@@ -182,11 +157,31 @@ $(document).ready(function () {
         if (start !== end) {
             var text = textarea.value;
             var selectedText = text.substring(start, end);
-            var newText = text.substring(0, start) + '<span class="origin">' + selectedText + '</span><span class="highlight">(' + selectedText + ')</span>' + text.substring(end);
+            var newText = text.substring(0, start) + '<span class="origin">' + selectedText + '</span><span class="highlight">' + leftBracket + selectedText + rightBracket + '</span>' + text.substring(end);
             $('#outputText').html(newText.replace(/\n/g, '<br>'));
         } else {
             alert('Please select some text.');
         }
+    }
+
+    $('#wrapBracket').click(function () {
+        wrapTextWithBrackets('(', ')');
+    });
+
+    $('#wrapTriangleBracket').click(function () {
+        wrapTextWithBrackets('〈', '〉');
+    });
+
+    $('#wrapQuoteBracket').click(function () {
+        wrapTextWithBrackets('“', '”');
+    });
+
+    $('#wrapSmallQuoteBracket').click(function () {
+        wrapTextWithBrackets('‘', '’');
+    });
+
+    $('#wrapCornerBracket').click(function () {
+        wrapTextWithBrackets('「', '」');
     });
 
     $('#outputText').on('click', '.highlight', function () {
@@ -198,5 +193,19 @@ $(document).ready(function () {
         $(this).hide();
         $(this).next('.highlight').show();
     });
+
+    $('#copy').click(function () {
+        var correctText = $('#outputText').html();
+    
+        correctText = correctText.replace(/<br\s*\/?>/gi, '\n')
+                                .replace(/<span class="origin".*?>.*?<\/span>|<span class="highlight".*?>/gi, '')
+                                .replace(/<\/span>/gi, '')
+                                .replace(/&lt;/gi, '<')
+                                .replace(/&gt;/gi, '>')
+                                .replace(/&nbsp;/gi, ' ');
+    
+        $('#inputText').val(correctText);
+    });
+    
 
 });

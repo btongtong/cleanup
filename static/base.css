@@ -15,8 +15,8 @@
     
     /* Font Size */
     --font-extra-large: 24px;
-    --font-large: 20px;
-    --font-medium: 15px;
+    --font-large: 18px;
+    --font-medium: 16px;
     --font-small: 12px;
 
     /* Font Weight */
@@ -73,21 +73,32 @@ header .logo {
     display: flex;
     align-items: center;
 
-    font-size: var(--font-large);
-    font-weight: var(--font-heavy);
+    font-size: calc(var(--font-extra-large)*0.9);
+    font-weight: 1000;
 
     color: var(--blue-dark-color);
 }
 
 header .logo i{
+    display: inline-block;
+
+    width: var(--font-extra-large);
+    height: var(--font-extra-large);
+
+    border-radius: 3px;
+
+    background-color: var(--blue-dark-color);
+    color: var(--white-color);
+
     font-size: var(--font-extra-large);
-    padding-right: calc(var(--padding)/2);
+    margin-right: calc(var(--padding)/2);
+    padding-left: 1px;
 }
 
 .title.blink {
     display: inline-block;
     margin: -3px;
-    font-weight: 250;
+    font-weight: var(--font-light);
 
     animation: blink-animation 1s steps(5, start) infinite;
 }

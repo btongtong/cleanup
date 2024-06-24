@@ -1,0 +1,15 @@
+{% extends "base.html" %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='board.css') }}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="board">
+        보드입니다
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='board.js') }}"></script>
+{% endblock extra_js %}

@@ -3,8 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
+from db_handler import DBModule
 
 app = Flask(__name__)
+app.secret_key = "dlrpantmsrlsmddmfgksmswldkfdkqhkdirpTek"
+DB = DBModule();
 
 # 부산대 맞춤법 검사기 URL
 SPELL_CHECK_URL = 'http://speller.cs.pusan.ac.kr/results'
@@ -13,7 +16,7 @@ SPELL_CHECK_URL = 'http://speller.cs.pusan.ac.kr/results'
 def index():
     return render_template('index.html')
 
-@app.route('/check_spell', methods=['POST'])
+@app.route('/check-spell', methods=['POST'])
 def check_spell():
     # form에서 데이터 가져오기
     origin_text = request.form['text']
@@ -23,8 +26,12 @@ def check_spell():
         'text1': origin_text
     }
 
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
     # HTTP POST 맞춤법 검사
-    response = requests.post(SPELL_CHECK_URL, data=data)
+    response = requests.post(SPELL_CHECK_URL, headers=headers, data=data)
     soup = BeautifulSoup(response.text, 'html.parser')
 
     # script부분 추출
@@ -47,5 +54,7 @@ def check_spell():
     else:
         return jsonify({'success': False, 'message': 'Failed to retrieve JSON data'})
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
