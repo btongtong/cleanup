@@ -44,8 +44,12 @@ class DBModule:
     def get_comments(self, pid):
         comments = self.db.child("posts").child(pid).child("comments").get()
         return comments.val() if comments else None
+    
+    def get_comment(self, pid, cid):
+        comment = self.db.child("posts").child(pid).child("comments").child(cid).get()
+        return comment.val() if comment else None
 
-    def push_comments(self, pid, comment, password):
+    def push_comment(self, pid, comment, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') # 비밀번호 해싱
             

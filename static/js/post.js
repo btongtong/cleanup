@@ -1,9 +1,12 @@
 $(document).ready(function () {
+    let action = '';
     $('#deletePost').click(function () {
+        action = 'delete';
         $('.confirm-box').show();
     });
 
     $('#updatePost').click(function () {
+        action = 'update';
         $('.confirm-box').show();
     });
 
@@ -23,7 +26,11 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if(response.success) {
-                    window.location.href = '/posts/' + pid + '/edit';
+                    if(action === 'update') {
+                        window.location.href = '/posts/' + pid + '/edit';
+                    } else {
+                        deletePost(pid);
+                    }
                 } else {
                     alert('Password is not correct');
                 }
@@ -33,5 +40,22 @@ $(document).ready(function () {
             }
         });
     });
+
+    function deletePost (pid) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/posts/'+ pid +'/delete',
+            success: function (response) {
+                if(response.success) {
+                    window.location.href = '/posts';
+                } else {
+                    alert('Failed to delete password');
+                }
+            },
+            error: function () {
+                alert('Failed tto delete password. Please try again later.');
+            }
+        });
+    }
 
 })

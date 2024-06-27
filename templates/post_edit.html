@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/post_edit.css') }}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="post-write">
+        post-write
+        <div id="toPostList"><a href="{{url_for('get_post', pid=pid)}}">toPostList</a></div>
+        <input type="hidden" id="pid" value="{{pid}}">
+        <textarea id="title">{{post.title}}</textarea>
+        <textarea type="text" id="content">{{post.content}}</textarea>
+        <button id="submit">submit</button>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/post_edit.js') }}"></script>
+{% endblock extra_js %}

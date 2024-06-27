@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
+from flask import Flask, redirect, url_for, render_template, request, jsonify, flash, session
 from db_handler import DBModule
 from bs4 import BeautifulSoup
 import requests
@@ -62,15 +62,22 @@ def check_post_password(pid):
     hashed_password = post['password'].encode('utf-8')
 
     if bcrypt.checkpw(password, hashed_password):
+        session['pid'] = pid
         return jsonify({'success': True, 'message': 'Password is correct'})
     else:
         return jsonify({'success': False, 'message': 'Password is not correct'})
     
-@app.route('/posts/<string:pid>/comments/check-password', methods=['POST'])
-def check_comment_password(pid):
-    post = DB.get_post(pid)
-    password = request.form['password']
-    return 
+@app.route('/posts/<string:pid>/comments/<string:cid>/check-password', methods=['POST'])
+def check_comment_password(pid, cid):
+    comment = DB.get_comment(pid, cid)
+    password = request.form['password'].encode('utf-8')
+    hashed_password = comment['password'].encode('utf-8')
+
+    if bcrypt.checkpw(password, hashed_password):
+        session['cid'] = pid
+        return jsonify({'success': True, 'message': 'Password is correct'})
+    else:
+        return jsonify({'success': False, 'message': 'Password is not correct'})
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
@@ -96,31 +103,59 @@ def get_post(pid):
 
 @app.route('/posts/<string:pid>/edit', methods=['GET'])
 def get_post_edit(pid):
-    return render_template('post_edit.html')
+    if 'pid' in session:
+        post = DB.get_post(pid)
+        return render_template('post_edit.html', post=post, pid=pid)
+    else:
+        flash('비밀번호 인증이 필요합니다')
+        return redirect(url_for('get_post', pid=pid))
 
 @app.route('/posts/<string:pid>/edit', methods=['PUT'])
 def update_post(pid):
-    pass
+    if 'pid' in session:
+        title = request.form['title']
+        content = request.form['content']
+        DB.update_post(pid, title, content)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/delete', methods=['DELETE'])
 def remove_post(pid):
-    pass
+    if 'pid' in session:
+        DB.remove_post(pid)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
 def get_comments(pid):
-    pass
+    comments = DB.get_comments(pid)
+    return jsonify({'success': True, 'data': comments})
 
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])
 def push_comments(pid):
-    pass
+    comment = request.form['content']
+    password = request.form['password']
+    cid = DB.push_comment(pid, comment, password)
+    return jsonify({'success': True, 'cid': cid})
 
 @app.route('/posts/<string:pid>/comments/<string:cid>/edit', methods=['PUT'])
 def update_comment(pid, cid):
-    pass
+    if 'cid' in session:
+        comment = request.form['content']
+        DB.update_comment(pid, cid, comment)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/comments/<string:cid>/delete', methods=['DELETE'])
 def remove_comment(pid, cid):
-    pass
+    if 'cid' in session:
+        DB.remove_comment(pid, cid)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
 
 if __name__ == '__main__':
     app.run(debug=True)
