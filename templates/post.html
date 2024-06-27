@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='post.css') }}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="post-list">
+        <div id="toPostWrite"><a href="{{url_for('get_posts')}}">toPosts</a></div>
+        <button id="deletePost">삭제</button>
+        <button id="updatePost">수정</button>
+        
+        <div class="confirm-box">
+            <button id="back">X</button>
+            <p>게시글 비밀번호를 입력해주세요.</p>
+            <input type="password" id="password">               
+            <button id="submit">확인</button>
+        </div>
+
+        <div>
+            <input type="hidden" id="pid" value="{{pid}}">
+            {{post.title}}
+            {{post.content}}
+            {{post.datetime}}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='post.js') }}"></script>
+{% endblock extra_js %}

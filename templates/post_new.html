@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='post_new.css') }}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="post-write">
+        post-write
+        <div id="toPostList"><a href="{{url_for('get_posts')}}">toPostList</a></div>
+        <textarea id="title"></textarea>
+        <textarea type="text" id="content"></textarea>
+        <input type="password" id="password"></input>
+        <button id="submit">submit</button>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='post_new.js') }}"></script>
+{% endblock extra_js %}

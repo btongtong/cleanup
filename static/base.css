@@ -42,8 +42,13 @@ textarea:focus,
 textarea:active,
 input:focus,
 input:active {
-  box-shadow: none;
-  outline: none;
+    box-shadow: none;
+    outline: none;
+}
+
+a{
+    color: #222;
+    text-decoration: none;
 }
 
 ::-webkit-scrollbar {
@@ -109,14 +114,14 @@ header .logo i{
     }
 }
 
-header .menu {
+header .menu a {
     font-size: var(--font-medium);
     font-weight: var(--font-medium-weight);
 
     color: var(--grey-dark-color);
 }
 
-header .menu:hover {
+header .menu a:hover {
     color: var(--blue-dark-color);
     font-weight: var(--font-heavy);
 }

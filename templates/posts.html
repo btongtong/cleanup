@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='posts.css') }}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="post-list">
+        {% if posts.length == 0 %}
+            <div>작성된 포스트가 없습니다.</div>
+        {% else %}
+            <div id="toPostWrite"><a href="{{url_for('get_post_write')}}">toPostWrite</a></div>
+            {% for pid, post in posts %}
+                <div>
+                    <a href="{{url_for('get_post', pid=pid)}}">{{pid}}</a>
+                    {{post.title}}
+                    {{post.content}}
+                    {{post.datetime}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='posts.js') }}"></script>
+{% endblock extra_js %}

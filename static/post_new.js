@@ -1,0 +1,28 @@
+$(document).ready(function () {
+    $('#submit').click(function () {
+        var title = $('#title').val();
+        var content = $('#content').val();
+        var password = $('#password').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/post/new',
+            data: { 
+                title: title, 
+                content: content,
+                password: password
+            },
+            success: function (response) {
+                if(response.success) {
+                    alert('success.');
+                    window.location.href = '/posts/' + response.pid;
+                } else {
+                    alert('Failed to create post. check if you fill all blank');
+                }
+            },
+            error: function () {
+                alert('Failed to create post. Please try again later.');
+            }
+        });
+    });
+})

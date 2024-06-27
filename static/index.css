@@ -28,6 +28,8 @@
 
     border: 1px solid var(--grey-middle-color);
     border-radius: calc(var(--padding)/2);
+
+    font-size: var(--font-small);
 }
 
 .function button:hover{
@@ -58,6 +60,8 @@
 
     position: sticky;
     top: 0;
+
+    border-radius: calc(var(--padding)/2) calc(var(--padding)/2) 0 0;
 }
 
 .original-text textarea{

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     function replaceAndHighlight(text, searchValue, newValue) {
         var highlightedText = text.split(searchValue).join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
         return highlightedText.replace(/\n/g, '<br>');
@@ -18,9 +17,12 @@ $(document).ready(function () {
                     var correctedText = text;
 
                     data.forEach(function (error) {
+                        console.log(error)
                         var orgStr = error['orgStr'];
                         var candWord = error['candWord'];
-                        correctedText = correctedText.replace(orgStr, function () {
+                        var regex = new RegExp(`(?!<span[^>]*?>)${orgStr}(?![^<]*?</span>)`, 'g');
+                        
+                        correctedText = correctedText.replace(regex, function () {
                             return '<span class="origin">' + orgStr + '</span><span class="highlight">' + candWord + '</span>';
                         });
                     });
@@ -60,13 +62,28 @@ $(document).ready(function () {
 
     $('#triangleBracket').click(function () {
         var text = $('#inputText').val();
-        var newText = text.replace(/</g, '〈').replace(/>/g, '〉').replace(/〈/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
+        var newText = text.replace(/</g, '〈change').replace(/>/g, '〉change').replace(/〈change/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉change/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
+        $('#outputText').html(newText.replace(/\n/g, '<br>'));
+    });
+
+    $('#doubleTriangleBracket').click(function () {
+        var text = $('#inputText').val();
+        var newText = text.replace(/<</g, '<span class="origin"><<</span><span class="highlight">《</span>').replace(/>>/g, '<span class="origin">>></span><span class="highlight">》</span>');
+        $('#outputText').html(newText.replace(/\n/g, '<br>'));
+    });
+
+    $('#doubleTriangleBracket').click(function () {
+        var text = $('#inputText').val();
+        var newText = text.replace(/<</g, '《change').replace(/>>/g, '》change').replace(/《change/g, '<span class="origin">&lt;&lt;</span><span class="highlight">《</span>').replace(/》change/g, '<span class="origin">&gt;&gt;</span><span class="highlight">》</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
     $('#ellipsis').click(function () {
         var text = $('#inputText').val();
-        var newText = text.replace(/···/g, '<span class="origin">···</span><span class="highlight">…</span>').replace(/\.\.\./g, '<span class="origin">...</span><span class="highlight">…</span>');
+        var newText = text
+                            .replace(/···/g, '<span class="origin">···</span><span class="highlight">…</span>')
+                            .replace(/\.\.\./g, '<span class="origin">...</span><span class="highlight">…</span>')
+                            .replace(/•••/g, '<span class="origin">•••</span><span class="highlight">…</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
@@ -85,12 +102,10 @@ $(document).ready(function () {
 
         for (let i = 0; i < text.length; i++) {
             if (text[i] === '“') {
-                result += '<span class="origin">' + text[i] + '</span>';
-                result += '<span class="highlight">“</span>';
+                result += text[i];
                 inQuote = true;
             } else if (text[i] === '”') {
-                result += '<span class="origin">' + text[i] + '</span>';
-                result += '<span class="highlight">”</span>';
+                result += text[i];
                 inQuote = false;
             } else if (text[i] === '"') {
                 result += '<span class="origin">' + text[i] + '</span>';
@@ -110,16 +125,14 @@ $(document).ready(function () {
 
         for (let i = 0; i < text.length; i++) {
             if (text[i] === '‘') {
-                result += '<span class="origin">' + text[i] + '</span>';
-                result += '<span class="highlight">‘</span>';
+                result += text[i];
                 inQuote = true;
             } else if (text[i] === '’') {
-                result += '<span class="origin">' + text[i] + '</span>';
-
                 if (i !== 0 && i != text.length - 1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
+                    result += '<span class="origin">' + text[i] + '</span>';
                     result += '<span class="highlight">&#39;</span>';
                 } else {
-                    result += '<span class="highlight">’</span>';
+                    result += text[i];
                     inQuote = false;
                 }
             } else if (text[i] === '\'') {
@@ -144,6 +157,16 @@ $(document).ready(function () {
             return '<span class="origin">' + match + '</span><span class="highlight">「</span>';
         }).replace(/[Jj丄□]/g, function(match) {
             return '<span class="origin">' + match + '</span><span class="highlight">」</span>';
+        });
+        $('#outputText').html(result.replace(/\n/g, '<br>'));
+    });
+
+    $('#doubleCornerBracket').click(function () {
+        var text = $('#inputText').val();
+        var result = text.replace(/[r厂■「]/g, function(match) {
+            return '<span class="origin">' + match + '</span><span class="highlight">『</span>';
+        }).replace(/[Jj丄□」]/g, function(match) {
+            return '<span class="origin">' + match + '</span><span class="highlight">』</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
@@ -207,5 +230,4 @@ $(document).ready(function () {
         $('#inputText').val(correctText);
     });
     
-
 });
