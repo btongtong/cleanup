@@ -1,7 +1,7 @@
 {% extends "base.html" %} 
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='post.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
 {% endblock extra_css %}
 
 {% block content %}
@@ -27,5 +27,5 @@
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="{{ url_for('static', filename='post.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/post.js') }}"></script>
 {% endblock extra_js %}
