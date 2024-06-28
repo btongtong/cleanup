@@ -23,6 +23,16 @@
             {{post.content}}
             {{post.datetime}}
         </div>
+
+        <div class="comments-list">
+            <div class="comment-write">
+                <textarea id="comment"></textarea>
+                <input type="password" id="cPassword">
+                <button id="comment-submit">댓글달기</button>
+            </div>
+            <ul id="commentList">
+            </ul>
+        </div>
     </div>
 {% endblock content %}
 

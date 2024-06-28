@@ -1,5 +1,62 @@
 $(document).ready(function () {
+    const pid = $('#pid').val();
     let action = '';
+
+    function loadComments() {
+        $.ajax({
+            type: 'GET',
+            url: '/posts/' + pid + '/comments',
+            success: function(response) {
+                if (response.success) {
+                    const commentsObj = response.data;
+                    const commentList = $("#commentList");
+                    commentList.empty(); // 존재하는 댓글들 지우기
+
+                    if (commentsObj) {
+                        Object.keys(commentsObj).forEach(function(key) {
+                            const comment = commentsObj[key];
+                            const commentItem = $("<li>").text(comment.comment);
+                            commentList.append(commentItem);
+                        });
+                    } else {
+                        commentList.append("<li>No comments yet.</li>");
+                    }
+                } else {
+                    alert("Failed to load comments.");
+                }
+            },
+            error: function () {
+                alert('Failed to load comments. Please try again later.');
+            }
+        });
+    }
+
+    loadComments();
+
+    $('#comment-submit').click(function () {
+        var comment = $('#comment').val(); 
+        var password = $('#cPassword').val(); 
+
+        $.ajax({
+            type: 'POST',
+            url: '/posts/'+ pid +'/comments/new',
+            data: { 
+                comment: comment,
+                password: password
+            },
+            success: function (response) {
+                if(response.success) {
+                    loadComments();
+                } else {
+                    alert('Failed to post comment.');
+                }
+            },
+            error: function () {
+                alert('Failed to post comment. Please try again later.');
+            }
+        });
+    })
+
     $('#deletePost').click(function () {
         action = 'delete';
         $('.confirm-box').show();
@@ -15,7 +72,6 @@ $(document).ready(function () {
     })
 
     $('#submit').click(function () {
-        var pid = $('#pid').val();
         var password = $('#password').val();
 
         $.ajax({

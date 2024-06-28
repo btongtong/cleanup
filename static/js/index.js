@@ -14,19 +14,31 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     var data = response.data;
+    
                     var correctedText = text;
-
+                    var offset = 0; // 교정에 따라 인덱스를 조정하기 위한 오프셋
+    
                     data.forEach(function (error) {
-                        console.log(error)
                         var orgStr = error['orgStr'];
                         var candWord = error['candWord'];
-                        var regex = new RegExp(`(?!<span[^>]*?>)${orgStr}(?![^<]*?</span>)`, 'g');
-                        
-                        correctedText = correctedText.replace(regex, function () {
-                            return '<span class="origin">' + orgStr + '</span><span class="highlight">' + candWord + '</span>';
-                        });
+                        var start = error['start'] + offset;
+                        var end = error['end'] + offset;
+    
+                        // 교정된 문자열 생성
+                        var originalLength = end - start;
+                        var replacement = '<span class="origin" style="display: none;">' + orgStr + '</span>' +
+                                        '<span class="highlight">' + candWord + '</span>';
+                        var replacementLength = replacement.length;
+    
+                        // 교정된 텍스트로 대체
+                        correctedText = correctedText.substring(0, start) +
+                                        replacement +
+                                        correctedText.substring(end);
+    
+                        // 인덱스 오프셋 업데이트
+                        offset += replacementLength - originalLength;
                     });
-
+    
                     $('#outputText').html(correctedText.replace(/\n/g, '<br>'));
                 } else {
                     alert('Failed to check spelling.');
@@ -38,7 +50,7 @@ $(document).ready(function () {
             }
         });
     });
-
+    
     $('#tilde').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html(replaceAndHighlight(text, '〜', '~'));
@@ -217,17 +229,50 @@ $(document).ready(function () {
         $(this).next('.highlight').show();
     });
 
+    // $('#copy').click(function () {
+    //     var correctText = $('#outputText').html();
+    
+    //     correctText = correctText.replace(/<br\s*\/?>/gi, '\n')
+    //                             .replace(/<span class="origin".*?>.*?<\/span>|<span class="highlight".*?>/gi, '')
+    //                             .replace(/<\/span>/gi, '')
+    //                             .replace(/&lt;/gi, '<')
+    //                             .replace(/&gt;/gi, '>')
+    //                             .replace(/&nbsp;/gi, ' ');
+    
+    //     $('#inputText').val(correctText);
+    // });
+
+    function getVisibleText(element) {
+        return $(element).contents().filter(function() {
+            return this.nodeType === Node.TEXT_NODE || $(this).is(':visible');
+        }).map(function() {
+            if (this.nodeType === Node.TEXT_NODE) {
+                return this.nodeValue;
+            } else if ($(this).is('br')) {
+                return '\n';
+            } else {
+                return $(this).text();
+            }
+        }).get().join('');
+    }
+
     $('#copy').click(function () {
-        var correctText = $('#outputText').html();
-    
-        correctText = correctText.replace(/<br\s*\/?>/gi, '\n')
-                                .replace(/<span class="origin".*?>.*?<\/span>|<span class="highlight".*?>/gi, '')
-                                .replace(/<\/span>/gi, '')
-                                .replace(/&lt;/gi, '<')
-                                .replace(/&gt;/gi, '>')
-                                .replace(/&nbsp;/gi, ' ');
-    
-        $('#inputText').val(correctText);
+        var visibleText = getVisibleText($('#outputText'));
+        navigator.clipboard.writeText(visibleText).then(function() {
+            console.log('Visible text copied to clipboard');
+        }).catch(function(err) {
+            console.error('Could not copy text: ', err);
+        });
     });
     
+    $('#paste').click(function () {
+        navigator.clipboard.readText().then(function(text) {
+            $('#inputText').val(text);
+            console.log('Text pasted from clipboard');
+        }).catch(function(err) {
+            console.error('Could not read text from clipboard: ', err);
+        });
+    });
+    
+
 });

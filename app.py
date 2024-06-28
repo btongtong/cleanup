@@ -20,7 +20,7 @@ def index():
 @app.route('/check-spell', methods=['POST'])
 def check_spell():
     # form에서 데이터 가져오기
-    origin_text = request.form['text']
+    origin_text = request.form['text'].replace('\n', '\r')  # 줄바꿈 처리를 인식 못해서 비교해봤더니 맞춤법 검사기는 \r 을 줄바꿈 표시로 인식하고 있어서 줄바꿈을 다 \r로 바꿔주기
 
     # 크롤링할 때 필요한 값 설정
     data = {
@@ -131,11 +131,11 @@ def remove_post(pid):
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
 def get_comments(pid):
     comments = DB.get_comments(pid)
-    return jsonify({'success': True, 'data': comments})
+    return jsonify({'success': True, 'data': comments.items()})
 
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])
 def push_comments(pid):
-    comment = request.form['content']
+    comment = request.form['comment']
     password = request.form['password']
     cid = DB.push_comment(pid, comment, password)
     return jsonify({'success': True, 'cid': cid})
