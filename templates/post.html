@@ -11,10 +11,10 @@
         <button id="updatePost">수정</button>
         
         <div class="confirm-box">
-            <button id="back">X</button>
+            <button class="back">X</button>
             <p>게시글 비밀번호를 입력해주세요.</p>
             <input type="password" id="password">               
-            <button id="submit">확인</button>
+            <button id="postPasswordSubmit">확인</button>
         </div>
 
         <div>
@@ -30,9 +30,18 @@
                 <input type="password" id="cPassword">
                 <button id="comment-submit">댓글달기</button>
             </div>
+
+            <div class="comment-confirm-box">
+                <button class="back">X</button>
+                <p>댓글 비밀번호를 입력해주세요.</p>
+                <input type="password" id="commentPassword">               
+                <button id="commentPasswordSubmit">확인</button>
+            </div>
+            
             <ul id="commentList">
             </ul>
         </div>
+
     </div>
 {% endblock content %}
 

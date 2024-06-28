@@ -1,6 +1,6 @@
 $(document).ready(function () {
+    const pid = window.location.pathname.split('/')[2];
     $('#submit').click(function () {
-        var pid = $('#pid').val();
         var title = $('#title').val();
         var content = $('#content').val();
 

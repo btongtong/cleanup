@@ -131,7 +131,7 @@ def remove_post(pid):
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
 def get_comments(pid):
     comments = DB.get_comments(pid)
-    return jsonify({'success': True, 'data': comments.items()})
+    return jsonify({'success': True, 'data': comments})
 
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])
 def push_comments(pid):
@@ -143,7 +143,7 @@ def push_comments(pid):
 @app.route('/posts/<string:pid>/comments/<string:cid>/edit', methods=['PUT'])
 def update_comment(pid, cid):
     if 'cid' in session:
-        comment = request.form['content']
+        comment = request.form['comment']
         DB.update_comment(pid, cid, comment)
         return jsonify({'success': True})
     else:
