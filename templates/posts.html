@@ -5,22 +5,38 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="post-list">
-        {% if posts.length == 0 %}
-            <div>작성된 포스트가 없습니다.</div>
-        {% else %}
-            <div id="toPostWrite"><a href="{{url_for('get_post_write')}}">toPostWrite</a></div>
-            {% for pid, post in posts %}
-                <div>
-                    {{post.comments|length}}
-                    <a href="{{url_for('get_post', pid=pid)}}">{{pid}}</a>
-                    {{post.title}}
-                    {{post.content}}
-                    {{post.datetime}}
-                    {{post.username}}
-                </div>
-            {% endfor %}
-        {% endif %}
+    <div class="post-list-container">
+        <h2>집단지성 : </h2>
+        <p>개선사항, 사용후기 등 자유롭게 글을 남겨주세요</p>
+        <div class="post-list-header">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="제목 검색" class="search-input">
+            </div>
+            <button class="post-write-btn">새 글 작성</button>
+        </div>
+        <table>
+            <tr>
+                <th class="table-title">제목</th>
+                <th class="table-writer">작성자</th>
+                <th class="table-datetime">작성일</th>
+                <th class="table-comment-cnt">댓글</th>
+            </tr>
+            {% if posts|length == 0 %}
+                <tr>
+                    <td colspan="4">작성된 게시글이 없습니다.</td>
+                </tr>
+            {% else %}
+                {% for pid, post in posts %}
+                    <tr>
+                        <td><a href="{{url_for('get_post', pid=pid)}}">{{post.title}}</a></td>
+                        <td>{{post.username}}</td>
+                        <td>{{post.datetime[:10]}}</td>
+                        <td>{{post.comments|length}}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
     </div>
 {% endblock content %}
 

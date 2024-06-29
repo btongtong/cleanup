@@ -4,14 +4,17 @@
     --white-color: #fff;
     --black-color: #140a00;
     --blue-dark-color: #1d2a3c;
+    --blue-light-color: #0078ff;
     --grey-dark-color: #657380;
     --grey-middle-color: #dce1e5;
     --grey-light-color: #f9fafb;
     
     /* Size */
     --padding: 16px;
+
     --min-width: 700px;
     --max-width: 1200px;
+    --min-height: 620px;
     
     /* Font Size */
     --font-extra-large: 24px;

@@ -13,7 +13,11 @@ class DBModule:
 
     def get_posts(self):
             posts = self.db.child("posts").get()
-            return posts.val() if posts else None
+            if posts.val():
+                sorted_posts = sorted(posts.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
+                return dict(sorted_posts)
+            else:
+                return None
 
     def push_post(self, title, content, username, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 

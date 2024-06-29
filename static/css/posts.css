@@ -1,3 +1,132 @@
-.post-write {
-    display: none;
+/* post-list-container */
+.post-list-container {
+    margin: calc(var(--padding)*1.7) auto;
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+    min-height: var(--min-height);
+    padding: var(--padding);
+}
+
+h2 {
+    font-size: calc(var(--font-extra-large)*1.2);
+}
+
+p {
+    margin-top: calc(var(--padding)*0.3);
+    margin-bottom: calc(var(--padding)*1.7);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-heavy);
+    color: var(--grey-dark-color);
+}
+
+/* post-list-header */
+.post-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    height: 35px;
+    width: 320px;
+
+    padding-left: calc(var(--padding)*0.5);
+
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+
+    overflow: hidden;
+}
+
+.search-box .search-input {
+    flex: 1;
+    border: none;
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    height: 100%;
+}
+
+.search-box .search-input::placeholder {
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+    color: var(--grey-dark-color);
+}
+
+.search-box i {
+    color: var(--grey-dark-color);
+}
+
+.post-write-btn {
+    height: 35px;
+    padding: calc(var(--padding)*0.3) calc(var(--padding)*0.6);
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: var(--blue-dark-color);
+    color: var(--white-color);
+    font-size: var(--font-medium);
+
+    transition: background-color 0.3s;
+}
+
+
+.post-write-btn:hover {
+    background-color: var(--blue-light-color);
+}
+
+/* post-list-table */
+table {
+    margin-top: var(--padding);
+
+    table-layout: fixed;
+
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+
+    overflow: hidden;
+}
+
+.table-writer {
+    width: 190px
+}
+.table-datetime {
+    width: 190px
+}
+.table-comment-cnt {
+    width: 100px
+}
+
+th, td {
+    padding: var(--padding);
+    border-bottom: 1px solid var(--grey-middle-color);
+
+    text-align: left;
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+th {
+    font-weight: var(--font-heavy);
+    background-color: var(--grey-light-color);
+}
+
+td {
+    text-overflow:ellipsis; 
+    overflow:hidden; 
+    white-space:nowrap;
+}
+
+td a:hover {
+    color: var(--blue-light-color);
+    text-decoration: underline;
 }

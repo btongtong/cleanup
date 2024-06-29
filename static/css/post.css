@@ -7,3 +7,21 @@
 .edit-comment {
     display: none;
 }
+
+.get-posts-btn {
+    height: 35px;
+    padding: calc(var(--padding)*0.3) calc(var(--padding)*0.6);
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: var(--blue-dark-color);
+    color: var(--white-color);
+    font-size: var(--font-medium);
+
+    transition: background-color 0.3s;
+}
+
+.get-posts-btn:hover {
+    background-color: var(--blue-light-color);
+}

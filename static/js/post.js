@@ -19,6 +19,7 @@ $(document).ready(function () {
                                 .attr("data-key", key)
                                 .append($("<div>").text(comment.comment))
                                 .append($("<div>").text(comment.datetime))
+                                .append($("<div>").text(comment.username))
                                 .append($("<button>").attr("class", "update-comment").text("수정"))
                                 .append($("<button>").attr("class", "delete-comment").text("삭제"));
 
@@ -27,6 +28,7 @@ $(document).ready(function () {
                                 .attr("class", "edit-comment")
                                 .append($("<textarea>").attr("id", "editComment").text(comment.comment))
                                 .append($("<div>").text(comment.datetime))
+                                .append($("<div>").text(comment.username))
                                 .append($("<button>").attr("id", "commentConfirm").text("확인"));
                             commentList.append(commentItem).append(commentEditItem);
                         });
@@ -214,5 +216,9 @@ $(document).ready(function () {
                 alert('Failed to edit comment. Please try again later.');
             }
         });
+    })
+
+    $('.get-posts-btn').click(function () {
+        window.location.href = '/posts';
     })
 })
