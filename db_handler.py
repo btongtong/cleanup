@@ -15,7 +15,7 @@ class DBModule:
             posts = self.db.child("posts").get()
             return posts.val() if posts else None
 
-    def push_post(self, title, content, password):
+    def push_post(self, title, content, username, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') # 비밀번호 해싱        
         
@@ -23,6 +23,7 @@ class DBModule:
             'title': title,
             'content': content,
             'datetime': current_datetime,
+            'username': username,
             'password': hashed_password
         })
             
@@ -49,13 +50,14 @@ class DBModule:
         comment = self.db.child("posts").child(pid).child("comments").child(cid).get()
         return comment.val() if comment else None
 
-    def push_comment(self, pid, comment, password):
+    def push_comment(self, pid, comment, username, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') # 비밀번호 해싱
             
         new_comment = self.db.child("posts").child(pid).child("comments").push({
             'comment': comment,
             'datetime': current_datetime,
+            'username': username,
             'password': hashed_password
         })
 

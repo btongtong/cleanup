@@ -18,15 +18,16 @@
         </div>
 
         <div>
-            <input type="hidden" id="pid" value="{{pid}}">
             {{post.title}}
             {{post.content}}
             {{post.datetime}}
+            {{post.username}}
         </div>
 
         <div class="comments-list">
             <div class="comment-write">
                 <textarea id="comment"></textarea>
+                <input type="text" id="cUsername">
                 <input type="password" id="cPassword">
                 <button id="comment-submit">댓글달기</button>
             </div>

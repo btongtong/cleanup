@@ -12,10 +12,12 @@
             <div id="toPostWrite"><a href="{{url_for('get_post_write')}}">toPostWrite</a></div>
             {% for pid, post in posts %}
                 <div>
+                    {{post.comments|length}}
                     <a href="{{url_for('get_post', pid=pid)}}">{{pid}}</a>
                     {{post.title}}
                     {{post.content}}
                     {{post.datetime}}
+                    {{post.username}}
                 </div>
             {% endfor %}
         {% endif %}

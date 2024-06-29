@@ -47,6 +47,7 @@ $(document).ready(function () {
 
     $('#comment-submit').click(function () {
         var comment = $('#comment').val(); 
+        var username = $('#cUsername').val();
         var password = $('#cPassword').val(); 
 
         $.ajax({
@@ -54,6 +55,7 @@ $(document).ready(function () {
             url: '/posts/'+ pid +'/comments/new',
             data: { 
                 comment: comment,
+                username: username,
                 password: password
             },
             success: function (response) {

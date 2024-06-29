@@ -88,8 +88,9 @@ def get_posts():
 def push_post():
     title = request.form['title']
     content = request.form['content']
+    username = request.form['username']
     password = request.form['password']
-    pid = DB.push_post(title, content, password)
+    pid = DB.push_post(title, content, username, password)
     return jsonify({'success': True, 'pid': pid})
 
 @app.route('/post/new', methods=['GET'])
@@ -136,8 +137,9 @@ def get_comments(pid):
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])
 def push_comments(pid):
     comment = request.form['comment']
+    username = request.form['username']
     password = request.form['password']
-    cid = DB.push_comment(pid, comment, password)
+    cid = DB.push_comment(pid, comment, username, password)
     return jsonify({'success': True, 'cid': cid})
 
 @app.route('/posts/<string:pid>/comments/<string:cid>/edit', methods=['PUT'])
