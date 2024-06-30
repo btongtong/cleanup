@@ -54,6 +54,19 @@ textarea {
     word-spacing: -5px;
 }
 
+textarea::placeholder, input::placeholder {
+    color: var(--grey-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-light);
+}
+
+textarea:hover,
+textarea:focus,
+input:hover,
+input:focus {
+    border: 1px solid var(--blue-light-color) !important;
+}
+
 a{
     color: #222;
     text-decoration: none;

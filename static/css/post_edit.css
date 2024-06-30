@@ -9,6 +9,7 @@
 /* 제목 */
 textarea.title {
     font-size: calc(var(--font-extra-large)*1.2);
+    font-weight: bold;
     color: var(--blue-dark-color);
 
     width: 100%;
@@ -19,10 +20,6 @@ textarea.title {
     border-radius: 5px;
 
     resize: none;
-}
-
-textarea.title:hover, textarea.title:focus {
-    border: 1px solid var(--blue-light-color);
 }
 
 /* 작성자 및 날짜 및 메뉴 버튼 */
@@ -51,7 +48,10 @@ textarea.title:hover, textarea.title:focus {
 .content {
     width: 100%;
     height: calc(var(--min-height)*0.7);
+
     padding: var(--padding);
+    margin: calc(var(--padding)*0.5) 0;
+
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
 
@@ -88,8 +88,6 @@ textarea.title:hover, textarea.title:focus {
 }
 
 .back {
-    font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
     
     width: 30px;
     height: 30px;
@@ -99,6 +97,11 @@ textarea.title:hover, textarea.title:focus {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.back a {
+    font-size: var(--font-large);
+    color: var(--grey-dark-color);
 }
 
 .back:hover {

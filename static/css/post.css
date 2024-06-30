@@ -10,13 +10,13 @@
 .post-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--padding);
 }
 
 h2.title {
     font-size: calc(var(--font-extra-large)*1.2);
     color: var(--blue-dark-color);
+
+    margin-bottom: var(--padding);
 }
 
 .menu-btn {
@@ -146,13 +146,6 @@ h2.title {
     resize: none;
 }
 
-#comment:hover,
-.edit-comment textarea:hover,
-#comment:focus,
-.edit-comment textarea:focus {
-    border: 1px solid var(--blue-light-color);
-}
-
 .input-btn-box {
     height: 80px;
 
@@ -173,17 +166,6 @@ h2.title {
     border-radius: 5px;
 
     font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
-}
-
-.input-btn-box input:hover, .input-btn-box input:focus {
-    border: 1px solid var(--blue-light-color);
-}
-
-.input-btn-box input::placeholder,
-#comment::placeholder {
-    color: var(--grey-color);
-    font-size: var(--font-small);
     font-weight: var(--font-medium-weight);
 }
 
@@ -365,12 +347,6 @@ li {
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
     margin: var(--padding) 0 calc(var(--padding)*0.5) 0;
-}
-
-.confirm-box input::placeholder {
-    color: var(--grey-color);
-    font-size: var(--font-small);
-    font-weight: var(--font-medium-weight);
 }
 
 #postPasswordSubmit,

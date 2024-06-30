@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    $('#submit').click(function () {
-        var title = $('#title').val();
-        var content = $('#content').val();
+    $('#postSubmit').click(function () {
+        var title = $('textarea.title').val();
+        var content = $('.content').val();
         var username = $('#username').val();
         var password = $('#password').val();
 
