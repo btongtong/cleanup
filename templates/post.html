@@ -6,43 +6,58 @@
 
 {% block content %}
     <div class="post-container">
-        <button class="get-posts-btn">toPosts</button>
-        <button id="deletePost">삭제</button>
-        <button id="updatePost">수정</button>
-        
-        <div class="confirm-box">
-            <button class="back">X</button>
-            <p>게시글 비밀번호를 입력해주세요.</p>
-            <input type="password" id="password">               
-            <button id="postPasswordSubmit">확인</button>
+        <div class="post-top">
+            <h2 class="title">{{post.title}}</h2>
+            <div class="menu-btn">
+                <div id="menuIcon">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="btn-container">
+                    <button id="deletePost">삭제</button>
+                    <button id="updatePost">수정</button>
+                </div>
+            </div>
+        </div>
+        <div class="writer-datetime-box">
+            <p class="writer">{{post.username}}</p>
+            <p class="datetime">{{post.datetime|format_datetime}}</p>
         </div>
 
-        <div>
-            {{post.title}}
+        <div class="post-content">
             {{post.content}}
-            {{post.datetime}}
-            {{post.username}}
         </div>
 
-        <div class="comments-list">
-            <div class="comment-write">
-                <textarea id="comment"></textarea>
-                <input type="text" id="cUsername">
-                <input type="password" id="cPassword">
-                <button id="comment-submit">댓글달기</button>
+        <div class="comment-write">
+            <div class="comment-write-title-box">
+                <div class="comment-write-icon"><i class="fa-solid fa-comment-dots"></i></div>
+                <p>댓글 쓰기</p>
             </div>
-
-            <div class="comment-confirm-box">
-                <button class="back">X</button>
-                <p>댓글 비밀번호를 입력해주세요.</p>
-                <input type="password" id="commentPassword">               
-                <button id="commentPasswordSubmit">확인</button>
+            <div class="comment-box">
+                <textarea id="comment" placeholder="댓글을 작성해보세요."></textarea>
+                <div class="input-btn-box">
+                    <input type="text" id="cUsername" placeholder="이름을 입력하세요.">
+                    <input type="password" id="cPassword" placeholder="비밀번호를 입력하세요.">
+                </div>
+                <button class="comment-submit">작성하기</button>
             </div>
-            
-            <ul id="commentList">
-            </ul>
         </div>
 
+        <ul id="commentList">
+        </ul>
+    </div>
+
+    <div class="overlay"></div>
+    <div class="post confirm-box">
+        <button class="back">X</button>
+        <p>비밀번호를 입력해주세요.</p>
+        <input type="password" id="password" placeholder="비밀번호 입력">               
+        <button id="postPasswordSubmit">확인</button>
+    </div>
+    <div class="comment confirm-box">
+        <button class="back">X</button>
+        <p>비밀번호를 입력해주세요.</p>
+        <input type="password" id="commentPassword" placeholder="비밀번호 입력">               
+        <button id="commentPasswordSubmit">확인</button>
     </div>
 {% endblock content %}
 

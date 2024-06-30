@@ -1,8 +1,8 @@
 $(document).ready(function () {
     const pid = window.location.pathname.split('/')[2];
-    $('#submit').click(function () {
-        var title = $('#title').val();
-        var content = $('#content').val();
+    $('#editSubmitBtn').click(function () {
+        var title = $('textarea.title').val();
+        var content = $('.content').val();
 
         $.ajax({
             type: 'PUT',

@@ -1,60 +1,106 @@
-.post-write {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.post-edit-container {
+    margin: calc(var(--padding)*1.7) auto;
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+    min-height: var(--min-height);
+    padding: var(--padding);
 }
 
-.post-write h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+/* 제목 */
+textarea.title {
+    font-size: calc(var(--font-extra-large)*1.2);
+    color: var(--blue-dark-color);
 
-.post-write .form-group {
-    margin-bottom: 20px;
-}
-
-.post-write label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.post-write textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    height: 70px;
+    padding: var(--padding);
+
+    border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
-    resize: vertical;
+
+    resize: none;
 }
 
-.post-write #submit {
-    display: block;
+textarea.title:hover, textarea.title:focus {
+    border: 1px solid var(--blue-light-color);
+}
+
+/* 작성자 및 날짜 및 메뉴 버튼 */
+.post-edit-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.writer-datetime-box {
+    padding-bottom: var(--padding);
+}
+
+.writer {
+    color: var(--blue-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-heavy);
+}
+
+.datetime {
+    color: var(--grey-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+/* 게시글 내용 */
+.content {
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: #fff;
+    height: calc(var(--min-height)*0.7);
+    padding: var(--padding);
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+
+    resize: none;
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+/* 버튼 */
+.btn-box {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#editSubmitBtn {
+    width: 120px;
+    height: 45px;
+    
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    background-color: var(--blue-dark-color);
+
+    color: var(--white-color);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    transition: background-color 0.3s;
 }
 
-.post-write #submit:hover {
-    background-color: #45a049;
+#editSubmitBtn:hover {
+    background-color: var(--blue-light-color);
 }
 
-.post-write #toPostList {
-    text-align: right;
-    margin-bottom: 10px;
+.back {
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+    
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.post-write #toPostList a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.post-write #toPostList a:hover {
-    text-decoration: underline;
+.back:hover {
+    background-color: var(--grey-middle-color);
 }

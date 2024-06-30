@@ -1,27 +1,403 @@
-.confirm-box {
-    display: none;
-}
-.comment-confirm-box {
-    display: none;
-}
-.edit-comment {
-    display: none;
+.post-container {
+    margin: calc(var(--padding)*1.7) auto;
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+    min-height: var(--min-height);
+    padding: var(--padding);
 }
 
-.get-posts-btn {
-    height: 35px;
-    padding: calc(var(--padding)*0.3) calc(var(--padding)*0.6);
+/* 제목 및 메뉴 버튼 */
+.post-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--padding);
+}
+
+h2.title {
+    font-size: calc(var(--font-extra-large)*1.2);
+    color: var(--blue-dark-color);
+}
+
+.menu-btn {
+    font-size: var(--font-large);
+    color: var(--grey-dark-color);
+
+    position: relative;
+    cursor: pointer;
+}
+
+#menuIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+}
+
+#menuIcon:hover {
+    background-color: var(--grey-middle-color);
+}
+
+.btn-container,
+.comment-btn-container {
+    width: 100px;
+
+    display: none;
+
+    position: absolute;
+    top: 0;
+    right: 25px;
+
+    box-shadow: 0 2px 4px var(--grey-middle-color);
+    z-index: 1;
+}
+
+.btn-container button {
+    padding: var(--padding);
+
+    width: 100%;
+
+    background-color: var(--white-color);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-light);
+    color: var(--grey-dark-color);
+
+    border: none;
+    cursor: pointer;
+}
+
+.btn-container button:hover {
+    background-color: var(--grey-light-color);
+}
+
+/* 작성자 및 날짜 */
+.writer-datetime-box {
+    padding-bottom: var(--padding);
+}
+
+.writer {
+    color: var(--blue-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-heavy);
+}
+
+.datetime {
+    color: var(--grey-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+/* 게시글 내용 */
+.post-content {
+    padding: calc(var(--padding)*2) 0;
+    border-top: 1px solid var(--grey-middle-color);
+    border-bottom: 1px solid var(--grey-middle-color);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+/* 댓글 섹션 */
+
+.comment-write {
+    margin: calc(var(--padding)*4) 0 calc(var(--padding)*2) 0;
+}
+
+.comment-write-title-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--padding);
+}
+
+.comment-write-icon {
+    margin-right: calc(var(--padding)*0.5);
+}
+
+.comment-write-title-box p {
+    font-size: var(--font-medium);
+    font-weight: var(--font-heavy);
+}
+
+.comment-box {
+    display: flex;
+    align-items: center;
+
+    gap: calc(var(--padding)*0.5);
+}
+
+#comment,
+.edit-comment textarea {
+    flex: 1;
+    height: 80px;
+
+    padding: var(--padding);
+
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    resize: none;
+}
+
+#comment:hover,
+.edit-comment textarea:hover,
+#comment:focus,
+.edit-comment textarea:focus {
+    border: 1px solid var(--blue-light-color);
+}
+
+.input-btn-box {
+    height: 80px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    justify-content: space-between;
+}
+
+
+.input-btn-box input {
+    width: 200px;
+
+    padding: calc(var(--padding)*0.5);
+
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+.input-btn-box input:hover, .input-btn-box input:focus {
+    border: 1px solid var(--blue-light-color);
+}
+
+.input-btn-box input::placeholder,
+#comment::placeholder {
+    color: var(--grey-color);
+    font-size: var(--font-small);
+    font-weight: var(--font-medium-weight);
+}
+
+.comment-submit {
+    background-color: var(--blue-dark-color);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+    color: var(--white-color);
+
+    height: 80px;
+    width: 87px;
 
     border: none;
     border-radius: 5px;
 
-    background-color: var(--blue-dark-color);
-    color: var(--white-color);
-    font-size: var(--font-medium);
+    cursor: pointer;
 
     transition: background-color 0.3s;
 }
 
-.get-posts-btn:hover {
+.comment-submit:hover {
     background-color: var(--blue-light-color);
+}
+
+li {
+    list-style: none;
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+
+    overflow: hidden;
+
+    margin-bottom: var(--padding);
+}
+
+.comment-list-top {
+    padding: var(--padding);
+
+    display: flex;
+    justify-content: space-between;
+
+    background-color: var(--grey-light-color);
+
+    border-bottom: 1px solid var(--grey-middle-color);
+}
+
+.comment-menu-btn {
+    position: relative;
+    cursor: pointer;
+}
+
+.comment-menu-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: var(--grey-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium);
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+}
+
+.comment-menu-icon:hover {
+    background-color: var(--grey-middle-color);
+}
+
+
+.comment-menu-btn button {
+    padding: var(--padding);
+
+    width: 100%;
+
+    background-color: var(--white-color);
+
+    font-size: var(--font-medium);
+    font-weight: var(--font-light);
+    color: var(--grey-dark-color);
+
+    border: none;
+    cursor: pointer;
+}
+
+.comment-menu-btn button:hover {
+    background-color: var(--grey-light-color);
+}
+
+.comment-content {
+    padding: var(--padding);
+}
+
+.edit-comment {
+    display: none;
+}
+
+.edit-comment-content-box {
+    display: flex;
+}
+
+.edit-comment textarea {
+    border: none;
+    border-radius: 0 0 0 5px;
+}
+
+.edit-comment textarea:hover, .edit-comment textarea:focus {
+    padding: 15px;
+}
+
+.comment-confirm {
+    background-color: var(--blue-dark-color);
+
+    color: var(--white-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    border: none;
+
+    width: 87px;
+    padding: var(--padding);
+
+    cursor: pointer;
+}
+
+/* 비밀번호 확인 박스 */
+.confirm-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 300px;
+    height: 200px;
+
+    border-radius: 5px;
+
+    transform: translate(-50%, -50%);
+    background-color: var(--grey-light-color);
+    padding: var(--padding);
+    z-index: 3;
+}
+
+.confirm-box .back {
+    position: absolute;
+    top: var(--padding);
+    right: var(--padding);
+
+    background-color: transparent;
+    color: var(--blue-dark-color);
+
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+}
+
+.confirm-box .back:hover {
+    color: var(--blue-light-color);
+}
+
+.confirm-box p {
+    color: var(--blue-dark-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-heavy);
+}
+
+.confirm-box input {
+    width: 100%;
+    height: 35px;
+
+    padding: calc(var(--padding)*0.5);
+
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 5px;
+    margin: var(--padding) 0 calc(var(--padding)*0.5) 0;
+}
+
+.confirm-box input::placeholder {
+    color: var(--grey-color);
+    font-size: var(--font-small);
+    font-weight: var(--font-medium-weight);
+}
+
+#postPasswordSubmit,
+#commentPasswordSubmit {
+    width: 100%;
+    height: 35px;
+
+    background-color: var(--blue-dark-color);
+
+    color: var(--white-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--grey-dark-color);
+    opacity: 0.7;
+    z-index: 2;
+    display: none;
 }

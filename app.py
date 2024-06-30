@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash, session
 from db_handler import DBModule
 from bs4 import BeautifulSoup
+from datetime import datetime
 import requests
 import bcrypt
 import json
@@ -119,16 +120,20 @@ def update_post(pid):
         title = request.form['title']
         content = request.form['content']
         DB.update_post(pid, title, content)
+        session.pop('pid', None)
         return jsonify({'success': True})
     else:
+        session.pop('pid', None)
         return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/delete', methods=['DELETE'])
 def remove_post(pid):
     if 'pid' in session:
         DB.remove_post(pid)
+        session.pop('pid', None)
         return jsonify({'success': True})
     else:
+        session.pop('pid', None)
         return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
@@ -149,17 +154,35 @@ def update_comment(pid, cid):
     if 'cid' in session:
         comment = request.form['comment']
         DB.update_comment(pid, cid, comment)
+        session.pop('cid', None)
         return jsonify({'success': True})
     else:
+        session.pop('cid', None)
         return jsonify({'success': False})
 
 @app.route('/posts/<string:pid>/comments/<string:cid>/delete', methods=['DELETE'])
 def remove_comment(pid, cid):
     if 'cid' in session:
         DB.remove_comment(pid, cid)
+        session.pop('cid', None)
         return jsonify({'success': True})
     else:
+        session.pop('cid', None)
         return jsonify({'success': False})
+    
+@app.template_filter('format_datetime')
+def format_datetime(value, format='%Y-%m-%d %H:%M'):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        try:
+            value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')  # ISO 8601 형식
+        except ValueError:
+            try:
+                value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')  # 기본 형식
+            except ValueError:
+                return value  # 변환 불가하면 원래 문자열 반환
+    return value.strftime(format)
 
 if __name__ == '__main__':
     app.run(debug=True)

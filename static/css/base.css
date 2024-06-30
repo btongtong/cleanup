@@ -6,6 +6,7 @@
     --blue-dark-color: #1d2a3c;
     --blue-light-color: #0078ff;
     --grey-dark-color: #657380;
+    --grey-color: #8395a7;
     --grey-middle-color: #dce1e5;
     --grey-light-color: #f9fafb;
     
@@ -13,14 +14,14 @@
     --padding: 16px;
 
     --min-width: 700px;
-    --max-width: 1200px;
+    --max-width: 1100px;
     --min-height: 620px;
     
     /* Font Size */
     --font-extra-large: 24px;
     --font-large: 18px;
     --font-medium: 16px;
-    --font-small: 12px;
+    --font-small: 13px;
 
     /* Font Weight */
     --font-heavy: 600;
@@ -47,6 +48,10 @@ input:focus,
 input:active {
     box-shadow: none;
     outline: none;
+}
+
+textarea {
+    word-spacing: -5px;
 }
 
 a{

@@ -5,13 +5,24 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="post-write">
-        post-write
-        <div id="toPostList"><a href="{{url_for('get_post', pid=pid)}}">toPostList</a></div>
-        <input type="hidden" id="pid" value="{{pid}}">
-        <textarea id="title">{{post.title}}</textarea>
-        <textarea type="text" id="content">{{post.content}}</textarea>
-        <button id="submit">submit</button>
+    <div class="post-edit-container">
+        <div class="post-edit-top">
+            <div class="writer-datetime-box">
+                <p class="writer">{{post.username}}</p>
+                <p class="datetime">{{post.datetime|format_datetime}}</p>
+            </div>
+            <div class="back">
+                <a href="{{url_for('get_post', pid=pid)}}"><i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+        </div>
+        <textarea class="title">{{post.title}}</textarea>
+
+        <textarea class="content">{{post.content}}</textarea>
+
+        <div class="btn-box">
+            <button id="editSubmitBtn">수정</button>
+        </div>
+        
     </div>
 {% endblock content %}
 
