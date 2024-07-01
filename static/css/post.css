@@ -140,9 +140,6 @@ h2.title {
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
 
-    font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
-
     resize: none;
 }
 

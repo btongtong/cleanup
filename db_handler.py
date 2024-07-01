@@ -11,21 +11,34 @@ class DBModule:
         firebase = pyrebase.initialize_app(config)  # 초기화
         self.db = firebase.database()   # 데이터베이스 연결
 
-    def get_posts(self):
+    def get_posts(self, page=1):
+        per_page = 10
         posts = self.db.child("posts").get()
+
         if posts.val():
             sorted_posts = sorted(posts.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
-            return dict(sorted_posts)
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_posts = sorted_posts[start:end]
+            return dict(paginated_posts), len(sorted_posts)
         else:
-            return None
+            return None, 0
             
-    def get_posts_by_title(self, title):
-        all_posts = self.get_posts()
-        if all_posts:
-            filtered_posts = {k: v for k, v in all_posts.items() if title.lower() in v['title'].lower()}
-            return filtered_posts
+    def get_posts_by_title(self, title, page=1):
+        per_page = 10
+        posts = self.db.child("posts").get()
+
+        if posts.val():
+            posts_dict = posts.val()
+            filtered_posts = {k: v for k, v in posts_dict.items() if title.lower() in v['title'].lower()}
+            sorted_posts = sorted(filtered_posts.items(), key=lambda x: x[1]['datetime'], reverse=True)
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_posts = sorted_posts[start:end]
+            return dict(paginated_posts), len(sorted_posts)
         else:
-            return None
+            return None, 0
+
         
 
     def push_post(self, title, content, username, password):

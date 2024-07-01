@@ -42,8 +42,6 @@
     flex: 1;
     height: 100%;
 
-    overflow-y: auto;
-
     position: relative;
 }
 
@@ -65,22 +63,15 @@
 
 .original-text textarea{
     width: 100%;
-    height: calc(100% - 35.5px);
 
     position: sticky;
     top: 35.5px;
 
-    border: none;
-    border: 1px solid var(--grey-middle-color);
-    border-radius: 0 0 calc(var(--padding)/2) calc(var(--padding)/2);
-    
     resize: none;
 }
 
 .original-text textarea, #outputText {
     line-height: 1.8; /* 줄간격을 1.5로 수정 */
-    font-family: inherit; /* 폰트 패밀리 추가 */
-    font-size: var(--font-medium);
     font-weight: var(--font-light);
 
     padding: var(--padding);
@@ -89,6 +80,7 @@
     border-radius: 0 0 calc(var(--padding)/2) calc(var(--padding)/2);
 
     word-wrap: break-word;
+    overflow-y: auto;
 
     height: calc(100% - 35.5px);
 }

@@ -56,9 +56,6 @@ textarea.title {
     border-radius: 5px;
 
     resize: none;
-
-    font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
 }
 
 /* 버튼 */

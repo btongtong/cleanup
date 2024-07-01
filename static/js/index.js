@@ -6,6 +6,7 @@ $(document).ready(function () {
 
     $('#grammar').click(function () {
         var text = $('#inputText').val();
+
         $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
         $.ajax({
             type: 'POST',
@@ -14,31 +15,31 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     var data = response.data;
-    
+
                     var correctedText = text;
                     var offset = 0; // 교정에 따라 인덱스를 조정하기 위한 오프셋
-    
+
                     data.forEach(function (error) {
                         var orgStr = error['orgStr'];
                         var candWord = error['candWord'];
                         var start = error['start'] + offset;
                         var end = error['end'] + offset;
-    
+
                         // 교정된 문자열 생성
                         var originalLength = end - start;
-                        var replacement = '<span class="origin" style="display: none;">' + orgStr + '</span>' +
-                                        '<span class="highlight">' + candWord + '</span>';
+                        var replacement = '<span class="origin">' + orgStr + '</span>' +
+                            '<span class="highlight">' + candWord + '</span>';
                         var replacementLength = replacement.length;
-    
+
                         // 교정된 텍스트로 대체
                         correctedText = correctedText.substring(0, start) +
-                                        replacement +
-                                        correctedText.substring(end);
-    
+                            replacement +
+                            correctedText.substring(end);
+
                         // 인덱스 오프셋 업데이트
                         offset += replacementLength - originalLength;
                     });
-    
+
                     $('#outputText').html(correctedText.replace(/\n/g, '<br>'));
                 } else {
                     alert('Failed to check spelling.');
@@ -50,7 +51,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('#tilde').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html(replaceAndHighlight(text, '〜', '~'));
@@ -93,15 +94,15 @@ $(document).ready(function () {
     $('#ellipsis').click(function () {
         var text = $('#inputText').val();
         var newText = text
-                            .replace(/···/g, '<span class="origin">···</span><span class="highlight">…</span>')
-                            .replace(/\.\.\./g, '<span class="origin">...</span><span class="highlight">…</span>')
-                            .replace(/•••/g, '<span class="origin">•••</span><span class="highlight">…</span>');
+            .replace(/···/g, '<span class="origin">···</span><span class="highlight">…</span>')
+            .replace(/\.\.\./g, '<span class="origin">...</span><span class="highlight">…</span>')
+            .replace(/•••/g, '<span class="origin">•••</span><span class="highlight">…</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
     $('#english').click(function () {
         var text = $('#inputText').val();
-        var newText = text.replace(/\b([a-zA-Z\s,]+)\b/g, function(match) {
+        var newText = text.replace(/\b([a-zA-Z\s,]+)\b/g, function (match) {
             return '<span class="origin">' + match.trim() + '</span><span class="highlight">(' + match.trim() + ')</span>';
         });
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
@@ -165,9 +166,9 @@ $(document).ready(function () {
 
     $('#cornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/[r厂■]/g, function(match) {
+        var result = text.replace(/[r厂■]/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">「</span>';
-        }).replace(/[Jj丄□]/g, function(match) {
+        }).replace(/[Jj丄□]/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">」</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
@@ -175,14 +176,14 @@ $(document).ready(function () {
 
     $('#doubleCornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/[r厂■「]/g, function(match) {
+        var result = text.replace(/[r厂■「]/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">『</span>';
-        }).replace(/[Jj丄□」]/g, function(match) {
+        }).replace(/[Jj丄□」]/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">』</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
-    
+
 
     function wrapTextWithBrackets(leftBracket, rightBracket) {
         var textarea = $('#inputText')[0];
@@ -231,21 +232,21 @@ $(document).ready(function () {
 
     // $('#copy').click(function () {
     //     var correctText = $('#outputText').html();
-    
+
     //     correctText = correctText.replace(/<br\s*\/?>/gi, '\n')
     //                             .replace(/<span class="origin".*?>.*?<\/span>|<span class="highlight".*?>/gi, '')
     //                             .replace(/<\/span>/gi, '')
     //                             .replace(/&lt;/gi, '<')
     //                             .replace(/&gt;/gi, '>')
     //                             .replace(/&nbsp;/gi, ' ');
-    
+
     //     $('#inputText').val(correctText);
     // });
 
     function getVisibleText(element) {
-        return $(element).contents().filter(function() {
+        return $(element).contents().filter(function () {
             return this.nodeType === Node.TEXT_NODE || $(this).is(':visible');
-        }).map(function() {
+        }).map(function () {
             if (this.nodeType === Node.TEXT_NODE) {
                 return this.nodeValue;
             } else if ($(this).is('br')) {
@@ -258,21 +259,21 @@ $(document).ready(function () {
 
     $('#copy').click(function () {
         var visibleText = getVisibleText($('#outputText'));
-        navigator.clipboard.writeText(visibleText).then(function() {
+        navigator.clipboard.writeText(visibleText).then(function () {
             console.log('Visible text copied to clipboard');
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error('Could not copy text: ', err);
         });
     });
-    
+
     $('#paste').click(function () {
-        navigator.clipboard.readText().then(function(text) {
+        navigator.clipboard.readText().then(function (text) {
             $('#inputText').val(text);
             console.log('Text pasted from clipboard');
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error('Could not read text from clipboard: ', err);
         });
     });
-    
+
 
 });

@@ -36,10 +36,6 @@ textarea.title {
     resize: none;
 }
 
-textarea.title:hover, textarea.title:focus {
-    border: 1px solid var(--blue-light-color);
-}
-
 /* 게시글 내용 */
 .content {
     width: 100%;
@@ -52,13 +48,6 @@ textarea.title:hover, textarea.title:focus {
     border-radius: 5px;
 
     resize: none;
-
-    font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
-}
-
-.content:hover, .content:focus {
-    border: 1px solid var(--blue-light-color);
 }
 
 /* 이름, 비밀번호 및 제출 버튼 */
@@ -75,8 +64,6 @@ textarea.title:hover, textarea.title:focus {
 
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-
     justify-content: space-between;
 }
 
@@ -88,9 +75,6 @@ textarea.title:hover, textarea.title:focus {
 
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
-
-    font-size: var(--font-medium);
-    font-weight: var(--font-medium-weight);
 }
 
 #postSubmit {

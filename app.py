@@ -22,6 +22,10 @@ def index():
 def check_spell():
     # form에서 데이터 가져오기
     origin_text = request.form['text'].replace('\n', '\r')  # 줄바꿈 처리를 인식 못해서 비교해봤더니 맞춤법 검사기는 \r 을 줄바꿈 표시로 인식하고 있어서 줄바꿈을 다 \r로 바꿔주기
+    print(origin_text)
+
+    # BOM 제거
+    origin_text = origin_text.replace('\ufeff', ' ')
 
     # 크롤링할 때 필요한 값 설정
     data = {
@@ -51,7 +55,9 @@ def check_spell():
 
     # json_data 프론트로 보내기
     if json_data:
+        print(json_data)
         error_words = [error for result in json_data for error in result['errInfo']]
+        print(error_words)
         return jsonify({'success': True, 'data': error_words})
     else:
         return jsonify({'success': False, 'message': 'Failed to retrieve JSON data'})
@@ -82,15 +88,17 @@ def check_comment_password(pid, cid):
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    if request.args.get('title'):
-        title = request.args.get('title')
-        posts = DB.get_posts_by_title(title)
+    title = request.args.get('title')
+    page = int(request.args.get('page', 1))
+    
+    if title:
+        posts, total_count = DB.get_posts_by_title(title, page)
     else:
-        posts = DB.get_posts()
+        posts, total_count = DB.get_posts(page)
 
     if posts is None:
         posts = {}
-    return render_template('posts.html', posts=posts.items())
+    return render_template('posts.html', posts=posts.items(), page=page, total_count=total_count)
 
 @app.route('/post/new', methods=['POST'])
 def push_post():

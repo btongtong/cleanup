@@ -40,18 +40,10 @@ body{
     font-weight: var(--font-medium-weight);
 }
 
-button:focus,
-button:active,
-textarea:focus,
-textarea:active,
-input:focus,
-input:active {
-    box-shadow: none;
-    outline: none;
-}
-
 textarea {
-    word-spacing: -5px;
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+    font-family: inherit;
 }
 
 textarea::placeholder, input::placeholder {
@@ -64,6 +56,7 @@ textarea:hover,
 textarea:focus,
 input:hover,
 input:focus {
+    outline: none;
     border: 1px solid var(--blue-light-color) !important;
 }
 
@@ -79,6 +72,7 @@ a{
 /* Header */
 header{
     border-bottom: 1px solid var(--grey-middle-color);
+    background-color: var(--grey-light-color);
 }
 
 .header-container{
@@ -93,8 +87,6 @@ header{
     height: 65px;
     min-width: var(--min-width);
     max-width: var(--max-width);
-
-    background-color: var(--grey-light-color);
 }
 
 header .logo {
