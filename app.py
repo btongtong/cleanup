@@ -82,7 +82,12 @@ def check_comment_password(pid, cid):
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    posts = DB.get_posts()
+    if request.args.get('title'):
+        title = request.args.get('title')
+        posts = DB.get_posts_by_title(title)
+    else:
+        posts = DB.get_posts()
+
     if posts is None:
         posts = {}
     return render_template('posts.html', posts=posts.items())

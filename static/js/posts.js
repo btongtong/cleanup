@@ -3,7 +3,8 @@ $(document).ready(function () {
         window.location.href = '/post/new';
     })
 
-    $('#search-btn').click(function () {
-        
+    $('.search-btn').click(function () {
+        var searchWord = $('.search-input').val();
+        window.location.href = '/posts?title='+searchWord;
     })
 })

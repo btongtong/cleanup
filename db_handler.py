@@ -12,12 +12,21 @@ class DBModule:
         self.db = firebase.database()   # 데이터베이스 연결
 
     def get_posts(self):
-            posts = self.db.child("posts").get()
-            if posts.val():
-                sorted_posts = sorted(posts.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
-                return dict(sorted_posts)
-            else:
-                return None
+        posts = self.db.child("posts").get()
+        if posts.val():
+            sorted_posts = sorted(posts.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
+            return dict(sorted_posts)
+        else:
+            return None
+            
+    def get_posts_by_title(self, title):
+        all_posts = self.get_posts()
+        if all_posts:
+            filtered_posts = {k: v for k, v in all_posts.items() if title.lower() in v['title'].lower()}
+            return filtered_posts
+        else:
+            return None
+        
 
     def push_post(self, title, content, username, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 
