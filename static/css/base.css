@@ -93,6 +93,8 @@ header{
     height: 65px;
     min-width: var(--min-width);
     max-width: var(--max-width);
+
+    background-color: var(--grey-light-color);
 }
 
 header .logo {
@@ -143,7 +145,7 @@ header .menu a {
 }
 
 header .menu a:hover {
-    color: var(--blue-dark-color);
+    color: var(--blue-light-color);
     font-weight: var(--font-heavy);
 }
 

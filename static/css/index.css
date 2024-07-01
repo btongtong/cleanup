@@ -42,9 +42,6 @@
     flex: 1;
     height: 100%;
 
-    border: 1px solid var(--grey-middle-color);
-    border-radius: calc(var(--padding)/2);
-
     overflow-y: auto;
 
     position: relative;
@@ -63,6 +60,7 @@
     top: 0;
 
     border-radius: calc(var(--padding)/2) calc(var(--padding)/2) 0 0;
+    border: 1px solid var(--blue-dark-color);
 }
 
 .original-text textarea{
@@ -73,7 +71,9 @@
     top: 35.5px;
 
     border: none;
+    border: 1px solid var(--grey-middle-color);
     border-radius: 0 0 calc(var(--padding)/2) calc(var(--padding)/2);
+    
     resize: none;
 }
 
@@ -85,7 +85,12 @@
 
     padding: var(--padding);
 
+    border: 1px solid var(--grey-middle-color);
+    border-radius: 0 0 calc(var(--padding)/2) calc(var(--padding)/2);
+
     word-wrap: break-word;
+
+    height: calc(100% - 35.5px);
 }
 
 .highlight {
