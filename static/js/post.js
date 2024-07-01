@@ -8,91 +8,86 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             url: '/posts/' + pid + '/comments',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
-                    const commentsObj = response.data;
+                    const commentsArray = response.data;
                     const commentList = $("#commentList");
                     commentList.empty(); // 존재하는 댓글들 지우기
-        
-                    if (commentsObj) {
-                        Object.keys(commentsObj).forEach(function(key) {
-                            const comment = commentsObj[key];
-                            const commentItem = $("<li>")
-                                .attr("data-key", key)
-                                .append(
-                                    $("<div>").addClass("comment-list-top")
-                                        .append(
-                                            $("<div>").addClass("comment-writer-datetime-box")
-                                                .append($("<p>").addClass("writer").text(comment.username))
-                                                .append($("<p>").addClass("datetime").text(comment.datetime.split('T')[0] + " " + comment.datetime.split('T')[1].substring(0, 5)))
-                                        )
-                                        .append(
-                                            $("<div>").addClass("comment-menu-btn")
-                                                .append(
-                                                    $("<div>").addClass("comment-menu-icon")
-                                                        .append($("<i>").addClass("fa-solid fa-ellipsis-vertical"))
-                                                )
-                                                .append(
-                                                    $("<div>").addClass("comment-btn-container")
-                                                        .append($("<button>").addClass("update-comment").text("수정"))
-                                                        .append($("<button>").addClass("delete-comment").text("삭제"))
-                                                )
-                                        )
-                                )
-                                .append(
-                                    $("<div>").addClass("comment-content").text(comment.comment)
-                                );
-        
-                            const commentEditItem = $("<li>")
-                                .attr("data-key", key)
-                                .addClass("edit-comment")
-                                .append(
-                                    $("<div>").addClass("comment-list-top")
-                                        .append(
-                                            $("<div>").addClass("comment-writer-datetime-box")
-                                                .append($("<p>").addClass("writer").text(comment.username))
-                                                .append($("<p>").addClass("datetime").text(comment.datetime))
-                                        )
-                                )
-                                .append(
-                                    $("<div>").addClass("edit-comment-content-box")
-                                        .append($("<textarea>").addClass("edit-commnet").text(comment.comment))
-                                        .append($("<button>").addClass("comment-confirm").text("수정"))
-                                );
-        
-                            commentList.append(commentItem).append(commentEditItem);
-                        });
-                    } else {
-                        commentList.append("<li>No comments yet.</li>");
-                    }
+
+                    commentsArray.forEach(function ([key, comment]) {
+                        const commentItem = $("<li>")
+                            .attr("data-key", key)
+                            .append(
+                                $("<div>").addClass("comment-list-top")
+                                    .append(
+                                        $("<div>").addClass("comment-writer-datetime-box")
+                                            .append($("<p>").addClass("writer").text(comment.username))
+                                            .append($("<p>").addClass("datetime").text(comment.datetime.split('T')[0] + " " + comment.datetime.split('T')[1].substring(0, 5)))
+                                    )
+                                    .append(
+                                        $("<div>").addClass("comment-menu-btn")
+                                            .append(
+                                                $("<div>").addClass("comment-menu-icon")
+                                                    .append($("<i>").addClass("fa-solid fa-ellipsis-vertical"))
+                                            )
+                                            .append(
+                                                $("<div>").addClass("comment-btn-container")
+                                                    .append($("<button>").addClass("update-comment").text("수정"))
+                                                    .append($("<button>").addClass("delete-comment").text("삭제"))
+                                            )
+                                    )
+                            )
+                            .append(
+                                $("<div>").addClass("comment-content").text(comment.comment)
+                            );
+
+                        const commentEditItem = $("<li>")
+                            .attr("data-key", key)
+                            .addClass("edit-comment")
+                            .append(
+                                $("<div>").addClass("comment-list-top")
+                                    .append(
+                                        $("<div>").addClass("comment-writer-datetime-box")
+                                            .append($("<p>").addClass("writer").text(comment.username))
+                                            .append($("<p>").addClass("datetime").text(comment.datetime))
+                                    )
+                            )
+                            .append(
+                                $("<div>").addClass("edit-comment-content-box")
+                                    .append($("<textarea>").addClass("edit-commnet").text(comment.comment))
+                                    .append($("<button>").addClass("comment-confirm").text("수정"))
+                            );
+
+                        commentList.append(commentItem).append(commentEditItem);
+                    });
                 } else {
-                    alert("Failed to load comments.");
+                    commentList.append("<li>No comments yet.</li>");
                 }
             },
             error: function () {
                 alert('Failed to load comments. Please try again later.');
             }
-        });        
+        });
     }
 
     loadComments();
 
     // 댓글 작성 클릭 로직
     $('.comment-submit').click(function () {
-        var comment = $('#comment').val(); 
+        var comment = $('#comment').val();
         var username = $('#cUsername').val();
-        var password = $('#cPassword').val(); 
+        var password = $('#cPassword').val();
 
         $.ajax({
             type: 'POST',
-            url: '/posts/'+ pid +'/comments/new',
-            data: { 
+            url: '/posts/' + pid + '/comments/new',
+            data: {
                 comment: comment,
                 username: username,
                 password: password
             },
             success: function (response) {
-                if(response.success) {
+                if (response.success) {
                     loadComments();
                 } else {
                     alert('Failed to post comment.');
@@ -103,9 +98,9 @@ $(document).ready(function () {
             }
         });
 
-        $('#comment').val(''); 
+        $('#comment').val('');
         $('#cUsername').val('');
-        $('#cPassword').val(''); 
+        $('#cPassword').val('');
     })
 
     // 게시물 삭제 비밀번호 인증 창 띄우기
@@ -129,7 +124,7 @@ $(document).ready(function () {
         $('.overlay').show();
         $('.comment.confirm-box').data('cid', cid).css('display', 'flex');
     });
-    
+
     //  댓글 수정 비밀번호 인증 창 띄우기
     $(document).on('click', '.update-comment', function () {
         const cid = $(this).closest('li').attr('data-key');
@@ -153,13 +148,13 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'POST',
-            url: '/posts/'+ pid +'/check-password',
-            data: { 
+            url: '/posts/' + pid + '/check-password',
+            data: {
                 password: password
             },
             success: function (response) {
-                if(response.success) {
-                    if(action === 'update') {
+                if (response.success) {
+                    if (action === 'update') {
                         window.location.href = '/posts/' + pid + '/edit';
                     } else {
                         deletePost(pid);
@@ -177,12 +172,12 @@ $(document).ready(function () {
     });
 
     // 게시글 삭제 로직
-    function deletePost (pid) {
+    function deletePost(pid) {
         $.ajax({
             type: 'DELETE',
-            url: '/posts/'+ pid +'/delete',
+            url: '/posts/' + pid + '/delete',
             success: function (response) {
-                if(response.success) {
+                if (response.success) {
                     window.location.href = '/posts';
                 } else {
                     alert('Failed to delete password');
@@ -205,13 +200,13 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/posts/' + pid + '/comments/' + cid + '/check-password',
-            data: { 
+            data: {
                 password: password
             },
             success: function (response) {
 
-                if(response.success) {
-                    if(action === 'update') {
+                if (response.success) {
+                    if (action === 'update') {
                         $(`#commentList li[data-key="${cid}"].edit-comment`).show();
                         $(`#commentList li[data-key="${cid}"]:not(.edit-comment)`).hide();
 
@@ -236,7 +231,7 @@ $(document).ready(function () {
             type: 'DELETE',
             url: '/posts/' + pid + '/comments/' + cid + '/delete',
             success: function (response) {
-                if(response.success) {
+                if (response.success) {
                     alert("success");
                     loadComments();
                 } else {
@@ -258,12 +253,12 @@ $(document).ready(function () {
         $.ajax({
             type: 'PUT',
             url: '/posts/' + pid + '/comments/' + cid + '/edit',
-            data: { 
+            data: {
                 comment: comment
             },
             success: function (response) {
 
-                if(response.success) {
+                if (response.success) {
                     loadComments();
                 } else {
                     alert('Fail to edit password.');
@@ -291,10 +286,10 @@ $(document).ready(function () {
         event.stopPropagation();
         $('.btn-container, .comment-btn-container').hide();
         $(this).closest('li').find('.comment-btn-container').show();
-    });    
+    });
 
     // 삭제, 수정 버튼 창 지우기
-    $(document).click(function(event) {
+    $(document).click(function (event) {
         $('.btn-container, .comment-btn-container').hide();
     });
 })

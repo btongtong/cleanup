@@ -57,7 +57,11 @@ class DBModule:
 
     def get_comments(self, pid):
         comments = self.db.child("posts").child(pid).child("comments").get()
-        return comments.val() if comments else None
+        if comments.val():
+            sorted_comments = sorted(comments.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
+            return sorted_comments
+        else:
+            return []
     
     def get_comment(self, pid, cid):
         comment = self.db.child("posts").child(pid).child("comments").child(cid).get()

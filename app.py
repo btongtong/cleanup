@@ -144,6 +144,7 @@ def remove_post(pid):
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
 def get_comments(pid):
     comments = DB.get_comments(pid)
+    print(comments)
     return jsonify({'success': True, 'data': comments})
 
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])
