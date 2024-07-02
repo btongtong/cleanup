@@ -8,7 +8,7 @@ import bcrypt
 import json
 import re
 
-app = Flask(__name__)
+app = Flask("Clean Up")
 app.secret_key = elemTree.parse('auth/keys.xml').find('string[@name="secret_key"]').text
 DB = DBModule()
 
@@ -197,7 +197,4 @@ def format_datetime(value, format='%Y-%m-%d %H:%M'):
             except ValueError:
                 return value  # 변환 불가하면 원래 문자열 반환
     return value.strftime(format)
-
-if __name__ == '__main__':
-    app.run(debug=False)
 
