@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash, session
+import xml.etree.ElementTree as elemTree
 from db_handler import DBModule
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -8,7 +9,7 @@ import json
 import re
 
 app = Flask(__name__)
-app.secret_key = "dlrpantmsrlsmddmfgksmswldkfdkqhkdirpTek"
+app.secret_key = elemTree.parse('auth/keys.xml').find('string[@name="secret_key"]').text
 DB = DBModule()
 
 # 부산대 맞춤법 검사기 URL
@@ -22,7 +23,6 @@ def index():
 def check_spell():
     # form에서 데이터 가져오기
     origin_text = request.form['text'].replace('\n', '\r')  # 줄바꿈 처리를 인식 못해서 비교해봤더니 맞춤법 검사기는 \r 을 줄바꿈 표시로 인식하고 있어서 줄바꿈을 다 \r로 바꿔주기
-    print(origin_text)
 
     # BOM 제거
     origin_text = origin_text.replace('\ufeff', ' ')
@@ -199,5 +199,5 @@ def format_datetime(value, format='%Y-%m-%d %H:%M'):
     return value.strftime(format)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
 
