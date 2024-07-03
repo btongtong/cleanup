@@ -102,3 +102,27 @@
 
     cursor: pointer;
 }
+
+#copy, #paste, .copy-confirm, .paste-confirm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+
+    top: 50%;
+    right: calc(var(--padding) * -1);
+    transform: translate(-50%, -50%);
+
+    border-radius: 5px;
+
+    width: 35.5px;
+    height: 35.5px;
+
+    color: var(--white-color);
+
+    z-index: 3;
+}
+
+.copy-confirm, .paste-confirm {
+    display: none;
+}

@@ -3,8 +3,8 @@ $(document).ready(function () {
 
     function replaceAndHighlight(text, searchValue, newValue) {
         var highlightedText = text
-                                .split(searchValue)
-                                .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
+            .split(searchValue)
+            .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
         return highlightedText.replace(/\n/g, '<br>');
     }
 
@@ -12,7 +12,7 @@ $(document).ready(function () {
         var text = $('#inputText').val();
         console.log(text)
 
-        $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>'); 
+        $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
         $.ajax({
             type: 'POST',
             url: '/check-spell',
@@ -30,7 +30,7 @@ $(document).ready(function () {
                         var start = error['start'] + offset;
                         var end = error['end'] + offset;
 
-                        if(candWord == '') return;
+                        if (candWord == '') return;
 
                         // 교정된 문자열 생성
                         var originalLength = end - start;
@@ -248,18 +248,28 @@ $(document).ready(function () {
     $('#copy').click(function () {
         var visibleText = getVisibleText($('#outputText'));
         navigator.clipboard.writeText(visibleText).then(function () {
-            console.log('Visible text copied to clipboard');
+            $('#copy').hide();
+            $('.copy-confirm').css('display', 'flex');  // 태그 보이기
+            setTimeout(function () {
+                $('.copy-confirm').hide();  // 3초 후 태그 숨기기
+                $('#copy').css('display', 'flex');
+            }, 2000);
         }).catch(function (err) {
-            console.error('Could not copy text: ', err);
+            
         });
     });
 
     $('#paste').click(function () {
         navigator.clipboard.readText().then(function (text) {
             $('#inputText').val(text);
-            console.log('Text pasted from clipboard');
+            $('#paste').hide();
+            $('.paste-confirm').css('display', 'flex');  // 태그 보이기
+            setTimeout(function () {
+                $('.paste-confirm').hide();  // 3초 후 태그 숨기기
+                $('#paste').css('display', 'flex');
+            }, 2000);
         }).catch(function (err) {
-            console.error('Could not read text from clipboard: ', err);
+            
         });
     });
 

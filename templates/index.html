@@ -1,3 +1,4 @@
+
 {% extends "base.html" %} 
 
 {% block extra_css %}
@@ -7,8 +8,6 @@
 {% block content %}
     <div class="content">
         <section class="function">
-            <button id="copy"><i class="fa-solid fa-angles-left"></i></button>
-            <button id="paste">paste</button>
             <button id="grammar">맞춤법</button>
             <button id="tilde">~</button>
             <button id="english">(eng)</button>
@@ -30,11 +29,19 @@
             
         </section>
         <section class="original-text">
-            <div class="title">수정 전</div>
-            <textarea id="inputText"></textarea>
+            <div class="title">
+                <span>수정 전</span>
+                <div id="paste"><i class="fa-regular fa-paste"></i></div>
+                <div class="paste-confirm"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <textarea id="inputText" placeholder="교정할 내용을 입력해주세요."></textarea>
         </section>
         <section class="corrected-text">
-            <div class="title">수정 후</div>
+            <div class="title">
+                <span>수정 후</span>
+                <div id="copy"><i class="fa-solid fa-copy"></i></div>
+                <div class="copy-confirm"><i class="fa-solid fa-check"></i></div>
+            </div>
             <div id="outputText"></div>
         </section>
     </div>
