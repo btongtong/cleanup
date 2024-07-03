@@ -109,11 +109,11 @@ $(document).ready(function () {
                 if (response.success) {
                     loadComments();
                 } else {
-                    alert('Failed to post comment.');
+                    alert('댓글 작성에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to post comment. Please try again later.');
+                alert('댓글 작성에 실패하였습니다. 나중에 다시 시도해주세요.');
             }
         });
 
@@ -179,11 +179,11 @@ $(document).ready(function () {
                         deletePost(pid);
                     }
                 } else {
-                    alert('Password is not correct');
+                    alert('비밀번호 인증에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to check password. Please try again later.');
+                alert('비밀번호 인증에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
 
@@ -199,11 +199,11 @@ $(document).ready(function () {
                 if (response.success) {
                     window.location.href = '/posts';
                 } else {
-                    alert('Failed to delete password');
+                    alert('게시글 삭제에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to delete password. Please try again later.');
+                alert('게시글 삭제에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
         $('.back').click();
@@ -234,11 +234,11 @@ $(document).ready(function () {
                         deleteComment(pid, cid);
                     }
                 } else {
-                    alert('Fail to check password.');
+                    alert('비밀번호 인증에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to check password. Please try again later.');
+                alert('비밀번호 인증에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
         $('.back').click();
@@ -254,11 +254,11 @@ $(document).ready(function () {
                     alert("success");
                     loadComments();
                 } else {
-                    alert('Failed to delete comment.');
+                    alert('댓글 삭제에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to delete comment. Please try again later.');
+                alert('댓글 삭제에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
         $('.back').click();
@@ -286,11 +286,11 @@ $(document).ready(function () {
                 if (response.success) {
                     loadComments();
                 } else {
-                    alert('Fail to edit password.');
+                    alert('댓글 수정에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to edit comment. Please try again later.');
+                alert('댓글 수정에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
     })

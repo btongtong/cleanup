@@ -31,11 +31,11 @@ $(document).ready(function () {
                     alert('success.');
                     window.location.href = '/posts/' + response.pid;
                 } else {
-                    alert('Failed to create post. check if you fill all blank');
+                    alert('게시글 작성에 실패하였습니다.');
                 }
             },
             error: function () {
-                alert('Failed to create post. Please try again later.');
+                alert('게시글 작성에 실패하였습니다. 나중에 다시 시도해주세요.');
             }
         });
     });
