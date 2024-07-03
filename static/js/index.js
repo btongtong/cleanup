@@ -1,13 +1,18 @@
+
 $(document).ready(function () {
+
     function replaceAndHighlight(text, searchValue, newValue) {
-        var highlightedText = text.split(searchValue).join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
+        var highlightedText = text
+                                .split(searchValue)
+                                .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
         return highlightedText.replace(/\n/g, '<br>');
     }
 
     $('#grammar').click(function () {
         var text = $('#inputText').val();
+        console.log(text)
 
-        $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
+        $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>'); 
         $.ajax({
             type: 'POST',
             url: '/check-spell',
@@ -24,6 +29,8 @@ $(document).ready(function () {
                         var candWord = error['candWord'];
                         var start = error['start'] + offset;
                         var end = error['end'] + offset;
+
+                        if(candWord == '') return;
 
                         // 교정된 문자열 생성
                         var originalLength = end - start;
@@ -76,12 +83,6 @@ $(document).ready(function () {
     $('#triangleBracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/</g, '〈change').replace(/>/g, '〉change').replace(/〈change/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉change/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
-    });
-
-    $('#doubleTriangleBracket').click(function () {
-        var text = $('#inputText').val();
-        var newText = text.replace(/<</g, '<span class="origin"><<</span><span class="highlight">《</span>').replace(/>>/g, '<span class="origin">>></span><span class="highlight">》</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
@@ -229,19 +230,6 @@ $(document).ready(function () {
         $(this).hide();
         $(this).next('.highlight').show();
     });
-
-    // $('#copy').click(function () {
-    //     var correctText = $('#outputText').html();
-
-    //     correctText = correctText.replace(/<br\s*\/?>/gi, '\n')
-    //                             .replace(/<span class="origin".*?>.*?<\/span>|<span class="highlight".*?>/gi, '')
-    //                             .replace(/<\/span>/gi, '')
-    //                             .replace(/&lt;/gi, '<')
-    //                             .replace(/&gt;/gi, '>')
-    //                             .replace(/&nbsp;/gi, ' ');
-
-    //     $('#inputText').val(correctText);
-    // });
 
     function getVisibleText(element) {
         return $(element).contents().filter(function () {

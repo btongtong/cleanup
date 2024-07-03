@@ -72,11 +72,30 @@ $(document).ready(function () {
 
     loadComments();
 
+    // 비밀번호 유효성 검사 함수
+    function isValidPassword(password) {
+        // 최소 6글자, 숫자 포함 여부, 문자 포함 여부
+        var regex = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/;
+        return regex.test(password);
+    }
+
     // 댓글 작성 클릭 로직
     $('.comment-submit').click(function () {
-        var comment = $('#comment').val();
-        var username = $('#cUsername').val();
-        var password = $('#cPassword').val();
+        var comment = $('#comment').val().trim();
+        var username = $('#cUsername').val().trim()
+        var password = $('#cPassword').val().trim()
+
+        // 필수 입력 필드가 비어 있는지 확인
+        if (comment === '' || username === '' || password === '') {
+            alert('모든 항목을 작성해주세요.'); 
+            return;  
+        }
+
+        // 비밀번호 유효성 검사
+        if (!isValidPassword(password)) {
+            alert('비밀번호는 문자와 숫자의 조합이며, 최소 6글자 이상이어야 합니다.');
+            return;
+        }
 
         $.ajax({
             type: 'POST',
@@ -248,7 +267,13 @@ $(document).ready(function () {
     // 댓글 수정 로직
     $(document).on('click', '.comment-confirm', function () {
         const cid = $(this).closest('li.edit-comment').data('key');
-        var comment = $('.edit-commnet').val();
+        var comment = $('.edit-commnet').val().trim();
+
+        // 필수 입력 필드가 비어 있는지 확인
+        if (comment === '') {
+            alert('모든 항목을 작성해주세요.'); 
+            return;  
+        }
 
         $.ajax({
             type: 'PUT',

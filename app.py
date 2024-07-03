@@ -47,7 +47,7 @@ def check_spell():
     # 여러 scripts 중 'data = []' 으로 된 부분 찾기
     for script in scripts:
         if script.string and 'data = [{' in script.string:
-            match = re.search(r'data = (\[.*?\]);', script.string, re.DOTALL)
+            match = re.search(r'data = (\[.*?\]);', script.string, re.DOTALL)   # 정규식으로 data=[] 형태를 찾고 그 안의 내용을 찾는다. re.DOTALL을 사용하여 줄바꿈 문자도 매칭
             if match:
                 json_text = match.group(1)
                 json_data = json.loads(json_text)
@@ -55,9 +55,7 @@ def check_spell():
 
     # json_data 프론트로 보내기
     if json_data:
-        print(json_data)
         error_words = [error for result in json_data for error in result['errInfo']]
-        print(error_words)
         return jsonify({'success': True, 'data': error_words})
     else:
         return jsonify({'success': False, 'message': 'Failed to retrieve JSON data'})
