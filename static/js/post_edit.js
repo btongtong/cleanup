@@ -1,5 +1,8 @@
 $(document).ready(function () {
+    // pid 주소줄에서 가져오기
     const pid = window.location.pathname.split('/')[2];
+
+    // 게시글 수정 로직
     $('#editSubmitBtn').click(function () {
         var title = $('textarea.title').val().trim();
         var content = $('.content').val().trim();
@@ -18,7 +21,6 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if(response.success) {
-                    alert('success.');
                     window.location.href = '/posts/' + pid;
                 } else {
                     alert('게시글 수정에 실패하였습니다.');

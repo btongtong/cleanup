@@ -1,6 +1,6 @@
-
 $(document).ready(function () {
 
+    // 특수문자 변환 및 원본 <span> 태그로 감싸기
     function replaceAndHighlight(text, searchValue, newValue) {
         var highlightedText = text
             .split(searchValue)
@@ -8,6 +8,7 @@ $(document).ready(function () {
         return highlightedText.replace(/\n/g, '<br>');
     }
 
+    // 맞춤법 검사
     $('#grammar').click(function () {
         var text = $('#inputText').val();
         console.log(text)
@@ -49,49 +50,56 @@ $(document).ready(function () {
 
                     $('#outputText').html(correctedText.replace(/\n/g, '<br>'));
                 } else {
-                    alert('Failed to check spelling.');
+                    alert('맞춤법 교정에 실패하였습니다.');
                 }
             },
             error: function () {
                 $('#outputText').text('');
-                alert('Failed to check spelling. Please try again later.');
+                alert('맞춤법 교정에 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
     });
 
+    // (~) 변환
     $('#tilde').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html(replaceAndHighlight(text, '〜', '~'));
     });
 
+    // (,) 변환
     $('#comma').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html(replaceAndHighlight(text, '，', ','));
     });
 
+    // (!) 변환
     $('#exclamation').click(function () {
         var text = $('#inputText').val();
         $('#outputText').html(replaceAndHighlight(text, '！', '!'));
     });
 
+    // (()) 변환
     $('#bracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/（/g, '<span class="origin">（</span><span class="highlight">(</span>').replace(/）/g, '<span class="origin">）</span><span class="highlight">)</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
+    // (<>) 변환
     $('#triangleBracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/</g, '〈change').replace(/>/g, '〉change').replace(/〈change/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉change/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
+    // (《》) 변환
     $('#doubleTriangleBracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/<</g, '《change').replace(/>>/g, '》change').replace(/《change/g, '<span class="origin">&lt;&lt;</span><span class="highlight">《</span>').replace(/》change/g, '<span class="origin">&gt;&gt;</span><span class="highlight">》</span>');
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
+    // (…) 변환
     $('#ellipsis').click(function () {
         var text = $('#inputText').val();
         var newText = text
@@ -101,6 +109,7 @@ $(document).ready(function () {
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
+    // (eng) 변환
     $('#english').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/\b([a-zA-Z\s,]+)\b/g, function (match) {
@@ -109,6 +118,7 @@ $(document).ready(function () {
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
+    // (“”) 변환
     $('#quote').click(function () {
         var text = $('#inputText').val();
         let result = '';
@@ -132,6 +142,7 @@ $(document).ready(function () {
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
 
+    // (‘’) 변환
     $('#smallQuote').click(function () {
         var text = $('#inputText').val();
         let result = '';
@@ -165,6 +176,7 @@ $(document).ready(function () {
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
 
+    // (「」) 변환
     $('#cornerBracket').click(function () {
         var text = $('#inputText').val();
         var result = text.replace(/[r厂■]/g, function (match) {
@@ -175,6 +187,7 @@ $(document).ready(function () {
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
 
+    // (『』) 변환
     $('#doubleCornerBracket').click(function () {
         var text = $('#inputText').val();
         var result = text.replace(/[r厂■「]/g, function (match) {
@@ -185,7 +198,7 @@ $(document).ready(function () {
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
 
-
+    // 드래그 한 부분을 감싸는 지정 괄호 변환 함수
     function wrapTextWithBrackets(leftBracket, rightBracket) {
         var textarea = $('#inputText')[0];
         var start = textarea.selectionStart;
@@ -197,7 +210,7 @@ $(document).ready(function () {
             var newText = text.substring(0, start) + '<span class="origin">' + selectedText + '</span><span class="highlight">' + leftBracket + selectedText + rightBracket + '</span>' + text.substring(end);
             $('#outputText').html(newText.replace(/\n/g, '<br>'));
         } else {
-            alert('Please select some text.');
+            alert('원하는 부분을 먼저 드래그해주세요.');
         }
     }
 
@@ -221,16 +234,19 @@ $(document).ready(function () {
         wrapTextWithBrackets('「', '」');
     });
 
+    // 하이라이트 부분 클릭 -> 원본 가져오기
     $('#outputText').on('click', '.highlight', function () {
         $(this).hide();
         $(this).prev('.origin').show();
     });
 
+    // 원본 클릭 -> 하이라이트 부분 가져오기
     $('#outputText').on('click', '.origin', function () {
         $(this).hide();
         $(this).next('.highlight').show();
     });
 
+    // 사용자에게 보여지는 부분만 글자 가져오기
     function getVisibleText(element) {
         return $(element).contents().filter(function () {
             return this.nodeType === Node.TEXT_NODE || $(this).is(':visible');
@@ -245,6 +261,7 @@ $(document).ready(function () {
         }).get().join('');
     }
 
+    // 복사
     $('#copy').click(function () {
         var visibleText = getVisibleText($('#outputText'));
         navigator.clipboard.writeText(visibleText).then(function () {
@@ -259,6 +276,7 @@ $(document).ready(function () {
         });
     });
 
+    // 붙여넣기
     $('#paste').click(function () {
         navigator.clipboard.readText().then(function (text) {
             $('#inputText').val(text);

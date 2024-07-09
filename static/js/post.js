@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // pid 주소줄에서 가져오기
     const pid = window.location.pathname.split('/')[2];
+    // 삭제, 수정 판단할 변수
     let action = '';
 
     // 댓글 리스트
@@ -14,6 +15,7 @@ $(document).ready(function () {
                     const commentList = $("#commentList");
                     commentList.empty(); // 존재하는 댓글들 지우기
 
+                    // 댓글 리스트
                     commentsArray.forEach(function ([key, comment]) {
                         const commentItem = $("<li>")
                             .attr("data-key", key)
@@ -41,6 +43,7 @@ $(document).ready(function () {
                                 $("<div>").addClass("comment-content").text(comment.comment)
                             );
 
+                        // 댓글 수정 리스트
                         const commentEditItem = $("<li>")
                             .attr("data-key", key)
                             .addClass("edit-comment")
@@ -61,11 +64,11 @@ $(document).ready(function () {
                         commentList.append(commentItem).append(commentEditItem);
                     });
                 } else {
-                    commentList.append("<li>No comments yet.</li>");
+                    commentList.append("<li>댓글이 없습니다.</li>");
                 }
             },
             error: function () {
-                alert('Failed to load comments. Please try again later.');
+                alert('댓글을 가져오는데 실패하였습니다. 다음에 다시 시도해주세요.');
             }
         });
     }
@@ -161,7 +164,7 @@ $(document).ready(function () {
         $('.comment.confirm-box').hide();
     })
 
-    // 게시글 비밀번호 인증 확인 클릭
+    // 게시글 비밀번호 인증
     $('#postPasswordSubmit').click(function () {
         var password = $('#password').val();
 
@@ -197,6 +200,7 @@ $(document).ready(function () {
             url: '/posts/' + pid + '/delete',
             success: function (response) {
                 if (response.success) {
+                    alert('게시글 삭제 완료.');
                     window.location.href = '/posts';
                 } else {
                     alert('게시글 삭제에 실패하였습니다.');
@@ -209,7 +213,7 @@ $(document).ready(function () {
         $('.back').click();
     }
 
-    // 댓글 비밀번호 인증 클릭
+    // 댓글 비밀번호 인증 
     $('#commentPasswordSubmit').click(function () {
         const cid = $('.comment.confirm-box').data('cid');
         var password = $('#commentPassword').val();
@@ -251,8 +255,8 @@ $(document).ready(function () {
             url: '/posts/' + pid + '/comments/' + cid + '/delete',
             success: function (response) {
                 if (response.success) {
-                    alert("success");
                     loadComments();
+                    alert("댓글 삭제 완료.");
                 } else {
                     alert('댓글 삭제에 실패하였습니다.');
                 }
@@ -282,7 +286,6 @@ $(document).ready(function () {
                 comment: comment
             },
             success: function (response) {
-
                 if (response.success) {
                     loadComments();
                 } else {

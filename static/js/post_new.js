@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // 게시글 등록 로직
     $('#postSubmit').click(function () {
         var title = $('textarea.title').val().trim();  // trim()을 사용하여 양쪽 공백 제거
         var content = $('.content').val().trim();
@@ -28,7 +29,6 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if(response.success) {
-                    alert('success.');
                     window.location.href = '/posts/' + response.pid;
                 } else {
                     alert('게시글 작성에 실패하였습니다.');
