@@ -6,7 +6,7 @@
 
     gap: var(--padding);
 
-    height: 620px;
+    height: var(--min-height);
     min-width: var(--min-width);
     max-width: var(--max-width);
 }
