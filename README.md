@@ -4,8 +4,9 @@
 
 > **시각장애인을 위한 전자책 제작 보조 프로그램** <br> **개발 기간: 2024-06-20 ~ 2024-07-05**
 
-## 배포 URL
-> **https://www.btongtong.store**
+## URL
+> **배포 URL: https://www.btongtong.store** <br>
+> **고찰 URL: https://ten-wind-194.notion.site/CLEAN-UP-2d3be566622c4fba82843d72a26aac8d?pvs=4**
 
 ## 프로젝트 소개
 
