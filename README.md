@@ -6,7 +6,7 @@
 
 ## URL
 > **배포 URL: https://www.btongtong.store** <br>
-> **고찰 URL: https://ten-wind-194.notion.site/CLEAN-UP-2d3be566622c4fba82843d72a26aac8d?pvs=4**
+> **프로젝트 구현 기록 URL: https://ten-wind-194.notion.site/CLEAN-UP-2d3be566622c4fba82843d72a26aac8d?pvs=4**
 
 ## 프로젝트 소개
 
