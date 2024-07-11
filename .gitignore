@@ -1,2 +1,4 @@
 # database
-auth/.DS_Store
+auth/
+# DS_Store
+.DS_Store
