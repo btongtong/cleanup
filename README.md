@@ -33,11 +33,14 @@
 
 ```
 📦 spell-check
-├─ .DS_Store
 ├─ .gitignore
+├─ README.m
 ├─ app.py
 ├─ db_handler.py
 ├─ requirements.txt
+├─ .auth
+│  ├─ firebase_config.json
+│  └─ keys.xml
 ├─ static
 │  ├─ css
 │  │  ├─ base.css
