@@ -1,17 +1,8 @@
 $(document).ready(function () {
 
-    // 특수문자 변환 및 원본 <span> 태그로 감싸기
-    function replaceAndHighlight(text, searchValue, newValue) {
-        var highlightedText = text
-            .split(searchValue)
-            .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
-        return highlightedText.replace(/\n/g, '<br>');
-    }
-
     // 맞춤법 검사
     $('#grammar').click(function () {
         var text = $('#inputText').val();
-        console.log(text)
 
         $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
         $.ajax({
@@ -60,29 +51,34 @@ $(document).ready(function () {
         });
     });
 
-    // (~) 변환
-    $('#tilde').click(function () {
+    // 특수문자 변환 및 원본 <span> 태그로 감싸기
+    function replaceAndHighlight(text, replacements) {
+        replacements.forEach(([searchValue, newValue]) => {
+            text = text.split(searchValue)
+                        .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
+        });
+        return text;
+    }
+    
+    $('#combination').click(function () {
         var text = $('#inputText').val();
-        $('#outputText').html(replaceAndHighlight(text, '〜', '~'));
-    });
-
-    // (,) 변환
-    $('#comma').click(function () {
-        var text = $('#inputText').val();
-        $('#outputText').html(replaceAndHighlight(text, '，', ','));
-    });
-
-    // (!) 변환
-    $('#exclamation').click(function () {
-        var text = $('#inputText').val();
-        $('#outputText').html(replaceAndHighlight(text, '！', '!'));
-    });
-
-    // (()) 변환
-    $('#bracket').click(function () {
-        var text = $('#inputText').val();
-        var newText = text.replace(/（/g, '<span class="origin">（</span><span class="highlight">(</span>').replace(/）/g, '<span class="origin">）</span><span class="highlight">)</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
+        var replacements = [
+            ['〜', '~'],
+            ['，', ','],
+            ['！', '!'],
+            ['：', ':'],
+            ['；', ';'],
+            ['···', '…'],
+            ['...', '…'],
+            ['•••', '…'],
+            ['（', '('],
+            ['）', ')']
+        ];
+    
+        text = replaceAndHighlight(text, replacements);
+        text = text.replace(/\n/g, '<br>');
+    
+        $('#outputText').html(text);
     });
 
     // (<>) 변환
@@ -96,25 +92,6 @@ $(document).ready(function () {
     $('#doubleTriangleBracket').click(function () {
         var text = $('#inputText').val();
         var newText = text.replace(/<</g, '《change').replace(/>>/g, '》change').replace(/《change/g, '<span class="origin">&lt;&lt;</span><span class="highlight">《</span>').replace(/》change/g, '<span class="origin">&gt;&gt;</span><span class="highlight">》</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
-    });
-
-    // (…) 변환
-    $('#ellipsis').click(function () {
-        var text = $('#inputText').val();
-        var newText = text
-            .replace(/···/g, '<span class="origin">···</span><span class="highlight">…</span>')
-            .replace(/\.\.\./g, '<span class="origin">...</span><span class="highlight">…</span>')
-            .replace(/•••/g, '<span class="origin">•••</span><span class="highlight">…</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
-    });
-
-    // (eng) 변환
-    $('#english').click(function () {
-        var text = $('#inputText').val();
-        var newText = text.replace(/\b([a-zA-Z\s,]+)\b/g, function (match) {
-            return '<span class="origin">' + match.trim() + '</span><span class="highlight">(' + match.trim() + ')</span>';
-        });
         $('#outputText').html(newText.replace(/\n/g, '<br>'));
     });
 
