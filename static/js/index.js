@@ -55,11 +55,11 @@ $(document).ready(function () {
     function replaceAndHighlight(text, replacements) {
         replacements.forEach(([searchValue, newValue]) => {
             text = text.split(searchValue)
-                        .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
+                .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
         });
         return text;
     }
-    
+
     $('#combination').click(function () {
         var text = $('#inputText').val();
         var replacements = [
@@ -74,10 +74,10 @@ $(document).ready(function () {
             ['（', '('],
             ['）', ')']
         ];
-    
+
         text = replaceAndHighlight(text, replacements);
         text = text.replace(/\n/g, '<br>');
-    
+
         $('#outputText').html(text);
     });
 
@@ -156,9 +156,9 @@ $(document).ready(function () {
     // (「」) 변환
     $('#cornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/[r厂■]/g, function (match) {
+        var result = text.replace(/(?<![a-zA-Z])([r厂■])(?![a-zA-Z])/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">「</span>';
-        }).replace(/[Jj丄□]/g, function (match) {
+        }).replace(/(?<![a-zA-Z])([Jj丄□])(?![a-zA-Z])/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">」</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
@@ -167,13 +167,14 @@ $(document).ready(function () {
     // (『』) 변환
     $('#doubleCornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/[r厂■「]/g, function (match) {
+        var result = text.replace(/(?<![a-zA-Z])([r厂■「])(?![a-zA-Z])/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">『</span>';
-        }).replace(/[Jj丄□」]/g, function (match) {
+        }).replace(/(?<![a-zA-Z])([Jj丄□」])(?![a-zA-Z])/g, function (match) {
             return '<span class="origin">' + match + '</span><span class="highlight">』</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
+
 
     // 드래그 한 부분을 감싸는 지정 괄호 변환 함수
     function wrapTextWithBrackets(leftBracket, rightBracket) {
@@ -195,20 +196,28 @@ $(document).ready(function () {
         wrapTextWithBrackets('(', ')');
     });
 
-    $('#wrapTriangleBracket').click(function () {
-        wrapTextWithBrackets('〈', '〉');
+    $('#wrapSmallQuoteBracket').click(function () {
+        wrapTextWithBrackets('‘', '’');
     });
 
     $('#wrapQuoteBracket').click(function () {
         wrapTextWithBrackets('“', '”');
     });
 
-    $('#wrapSmallQuoteBracket').click(function () {
-        wrapTextWithBrackets('‘', '’');
+    $('#wrapTriangleBracket').click(function () {
+        wrapTextWithBrackets('〈', '〉');
+    });
+
+    $('#wrapDoubleTriangleBracket').click(function () {
+        wrapTextWithBrackets('《', '》');
     });
 
     $('#wrapCornerBracket').click(function () {
         wrapTextWithBrackets('「', '」');
+    });
+
+    $('#wrapDoubleCornerBracket').click(function () {
+        wrapTextWithBrackets('『', '』');
     });
 
     // 하이라이트 부분 클릭 -> 원본 가져오기
@@ -249,7 +258,7 @@ $(document).ready(function () {
                 $('#copy').css('display', 'flex');
             }, 2000);
         }).catch(function (err) {
-            
+
         });
     });
 
@@ -264,7 +273,7 @@ $(document).ready(function () {
                 $('#paste').css('display', 'flex');
             }, 2000);
         }).catch(function (err) {
-            
+
         });
     });
 });
