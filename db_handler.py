@@ -69,7 +69,7 @@ class DBModule:
         self.db.child("posts").child(pid).remove()
 
     def get_comments(self, pid):
-        comments = self.db.child("posts").child(pid).child("comments").get()
+        comments = self.db.child("comments").child(pid).get()
         if comments.val():
             sorted_comments = sorted(comments.val().items(), key=lambda x: x[1]['datetime'], reverse=True)
             return sorted_comments
@@ -77,14 +77,14 @@ class DBModule:
             return []
     
     def get_comment(self, pid, cid):
-        comment = self.db.child("posts").child(pid).child("comments").child(cid).get()
+        comment = self.db.child("comments").child(pid).child(cid).get()
         return comment.val() if comment else None
 
     def push_comment(self, pid, comment, username, password):
         current_datetime = datetime.now().isoformat()   # 현재 시간 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') # 비밀번호 해싱
             
-        new_comment = self.db.child("posts").child(pid).child("comments").push({
+        new_comment = self.db.child("comments").child(pid).push({
             'comment': comment,
             'datetime': current_datetime,
             'username': username,
@@ -94,10 +94,10 @@ class DBModule:
         return new_comment['name']
 
     def update_comment(self, pid, cid, comment):
-        self.db.child("posts").child(pid).child("comments").child(cid).update({
+        self.db.child("comments").child(pid).child(cid).update({
             "comment": comment
         })
 
     def remove_comment(self, pid, cid):
-        self.db.child("posts").child(pid).child("comments").child(cid).remove()
+        self.db.child("comments").child(pid).child(cid).remove()
         

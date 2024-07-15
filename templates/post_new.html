@@ -9,7 +9,15 @@
         <h2>집단지성 :</h2>
         <p>개선사항, 사용후기 등 자유롭게 글을 남겨주세요</p>
         <textarea class="title" placeholder="제목을 입력하세요."></textarea>
-        <textarea class="content" placeholder="내용을 입력하세요."></textarea>
+        
+        <div class="content editor-container">
+            <div class="editor-toolbars">
+                <input type="file" id="imageUpload" style="display:none;" accept="image/*">
+                <button type="button" id="imageButton" class="control-base"><i class="fa-regular fa-image"></i></button>
+            </div>
+            <div class="editor" contenteditable="true"><span class="placeholder">내용을 입력하세요.</span></div>
+        </div>
+
         <div class="signature-box">
             <div class="input-box">
                 <input type="text" id="username" placeholder="이름을 입력하세요.">

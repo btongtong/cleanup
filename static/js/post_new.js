@@ -46,4 +46,55 @@ $(document).ready(function () {
         var regex = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/;
         return regex.test(password);
     }
+
+    const editor = $('.editor');
+
+    $('#imageButton').on('click', function() {
+        imageUpload.click();
+    });
+
+    // 이미지 파일 선택 시
+    $('#imageUpload').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            uploadImage(file);
+        }
+    });
+
+    // 이미지 업로드 함수
+    function uploadImage(file) {
+        var formData = new FormData();
+        formData.append('image', file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',  // 이미지 업로드 처리를 담당하는 Flask 라우트 URL
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    var imageUrl = response.url;
+                    var imageHtml = '<img src="' + imageUrl + '" class="uploaded-image">';
+                    $('.editor').append(imageHtml);
+                } else {
+                    alert('이미지 업로드에 실패하였습니다.');
+                }
+            },
+            error: function() {
+                alert('이미지 업로드에 실패하였습니다. 나중에 다시 시도해주세요.');
+            }
+        });
+    }
+
+    editor.on('keydown', function(e) {
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            if (range.collapsed && range.startContainer.nodeName === 'IMG') {
+                e.preventDefault();
+                $(range.startContainer).remove();
+            }
+        }
+    });
 })

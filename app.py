@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash, session
-import xml.etree.ElementTree as elemTree
+from auth.keys import SECRET_KEY
+from file_handler import FileModule
 from db_handler import DBModule
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -9,8 +10,9 @@ import json
 import re
 
 app = Flask(__name__)
-app.secret_key = elemTree.parse('auth/keys.xml').find('string[@name="secret_key"]').text
+app.secret_key = SECRET_KEY
 DB = DBModule()
+FILE = FileModule()
 
 # 부산대 맞춤법 검사기 URL
 SPELL_CHECK_URL = 'http://speller.cs.pusan.ac.kr/results'
@@ -180,6 +182,29 @@ def remove_comment(pid, cid):
         return jsonify({'success': True})
     else:
         session.pop('cid', None)
+        return jsonify({'success': False})
+    
+@app.route('/file/upload', methods=['POST'])
+def file_upload():
+
+    if 'image' not in request.files:
+        return jsonify({'success': False})
+    
+    file = request.files['image']
+    response = FILE.file_upload(file=file)
+    
+    if response != 'fail':
+        return jsonify({'success': True, 'url': response})
+    else:
+        return jsonify({'success': False})
+
+@app.route('/file/<string:file_url>/delete', methods=['DELETE'])
+def file_delete(file_url):
+    response = FILE.file_delete(file_url=file_url)
+    
+    if response != 'fail':
+        return jsonify({'success': True})
+    else:
         return jsonify({'success': False})
     
 @app.template_filter('format_datetime')
