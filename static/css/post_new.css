@@ -2,7 +2,6 @@
     margin: calc(var(--padding)*1.7) auto;
     min-width: var(--min-width);
     max-width: var(--max-width);
-    min-height: var(--min-height);
     padding: var(--padding);
 }
 
@@ -46,6 +45,59 @@ textarea.title {
 
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
+}
+
+.content:hover {
+    outline: none;
+    border: 1px solid var(--blue-light-color);
+}
+
+.editor-toolbars {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    padding-bottom: var(--padding);
+
+    border-bottom: 1px solid var(--grey-middle-color);
+}
+
+.editor-toolbars button {
+    border: none;
+    background: none;
+}
+
+.editor-toolbars i {
+    font-size: var(--font-large);
+}
+
+.editor {
+    padding-top: var(--padding);
+}
+
+.editor p {
+    margin: 0;
+
+    width: 100%;
+    min-height: 25px;
+
+    color: rgb(0, 0, 0);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+.editor img {
+    max-width: 100%;
+}
+
+.editor p.placeholder {
+    color: var(--grey-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-light);
+} 
+
+.editor:focus {
+    outline: none;
 }
 
 /* 이름, 비밀번호 및 제출 버튼 */
@@ -99,4 +151,3 @@ textarea.title {
 #postSubmit:hover {
     background-color: var(--blue-light-color);
 }
-

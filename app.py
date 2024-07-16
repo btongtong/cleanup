@@ -198,7 +198,7 @@ def file_upload():
     else:
         return jsonify({'success': False})
 
-@app.route('/file/<string:file_url>/delete', methods=['DELETE'])
+@app.route('/file/<path:file_url>/delete', methods=['DELETE'])
 def file_delete(file_url):
     response = FILE.file_delete(file_url=file_url)
     
