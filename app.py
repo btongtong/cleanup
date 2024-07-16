@@ -26,6 +26,7 @@ def check_spell():
     # form에서 데이터 가져오기
     origin_text = request.form['text'].replace('\n', '\r')  # 줄바꿈 처리를 인식 못해서 비교해봤더니 맞춤법 검사기는 \r 을 줄바꿈 표시로 인식하고 있어서 줄바꿈을 다 \r로 바꿔주기
 
+    print(origin_text)
     # BOM 제거
     origin_text = origin_text.replace('\ufeff', ' ')
 
@@ -57,6 +58,7 @@ def check_spell():
 
     # json_data 프론트로 보내기
     if json_data:
+        print(json_data)
         error_words = [error for result in json_data for error in result['errInfo']]
         return jsonify({'success': True, 'data': error_words})
     else:

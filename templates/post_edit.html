@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/post_edit.css') }}">
@@ -8,20 +8,26 @@
     <div class="post-edit-container">
         <div class="post-edit-top">
             <div class="writer-datetime-box">
-                <p class="writer">{{post.username}}</p>
-                <p class="datetime">{{post.datetime|format_datetime}}</p>
+                <p class="writer">{{ post.username }}</p>
+                <p class="datetime">{{ post.datetime|format_datetime }}</p>
             </div>
             <div class="back">
-                <a href="{{url_for('get_post', pid=pid)}}"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="{{ url_for('get_post', pid=pid) }}"><i class="fa-solid fa-arrow-left"></i></a>
             </div>
         </div>
-        <textarea class="title" placeholder="제목을 입력하세요.">{{post.title}}</textarea>
-        <textarea class="content" placeholder="내용을 입력하세요.">{{post.content}}</textarea>
+        <textarea class="title" placeholder="제목을 입력하세요.">{{ post.title }}</textarea>
+        
+        <div class="content editor-container">
+            <div class="editor-toolbars">
+                <input type="file" id="imageUpload" style="display:none;" accept="image/*">
+                <button type="button" id="imageButton" class="control-base"><i class="fa-regular fa-image"></i></button>
+            </div>
+            <div class="editor" contenteditable="true">{{ post.content|safe }}</div>
+        </div>
 
         <div class="btn-box">
             <button id="editSubmitBtn">수정</button>
         </div>
-        
     </div>
 {% endblock content %}
 

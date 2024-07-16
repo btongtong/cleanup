@@ -47,15 +47,66 @@ textarea.title {
 /* 게시글 내용 */
 .content {
     width: 100%;
-    height: calc(var(--min-height)*0.7);
+    min-height: calc(var(--min-height)*0.7);
 
     padding: var(--padding);
     margin: calc(var(--padding)*0.5) 0;
 
     border: 1px solid var(--grey-middle-color);
     border-radius: 5px;
+}
 
-    resize: none;
+.content:hover {
+    outline: none;
+    border: 1px solid var(--blue-light-color);
+}
+
+.editor-toolbars {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    padding-bottom: var(--padding);
+
+    border-bottom: 1px solid var(--grey-middle-color);
+}
+
+.editor-toolbars button {
+    border: none;
+    background: none;
+}
+
+.editor-toolbars i {
+    font-size: var(--font-large);
+}
+
+.editor {
+    padding-top: var(--padding);
+}
+
+.editor p {
+    margin: 0;
+
+    width: 100%;
+    min-height: 25px;
+
+    color: rgb(0, 0, 0);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+.editor img {
+    max-width: 100%;
+}
+
+.editor p.placeholder {
+    color: var(--grey-color);
+    font-size: var(--font-medium);
+    font-weight: var(--font-light);
+} 
+
+.editor:focus {
+    outline: none;
 }
 
 /* 버튼 */
