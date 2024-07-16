@@ -102,6 +102,21 @@ h2.title {
     font-weight: var(--font-medium-weight);
 }
 
+.post-content p {
+    margin: 0;
+
+    width: 100%;
+    min-height: 25px;
+
+    color: rgb(0, 0, 0);
+    font-size: var(--font-medium);
+    font-weight: var(--font-medium-weight);
+}
+
+.post-content img {
+    max-width: 100%;
+}
+
 /* 댓글 섹션 */
 
 .comment-write {
