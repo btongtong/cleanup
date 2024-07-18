@@ -68,6 +68,9 @@ class DBModule:
     def remove_post(self, pid):
         self.db.child("posts").child(pid).remove()
 
+    def remove_post_comment(self, pid):
+        self.db.child("comments").child(pid).remove()
+
     def get_comments(self, pid):
         comments = self.db.child("comments").child(pid).get()
         if comments.val():

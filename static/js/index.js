@@ -72,7 +72,9 @@ $(document).ready(function () {
             ['...', '…'],
             ['•••', '…'],
             ['（', '('],
-            ['）', ')']
+            ['）', ')'],
+            ['［', '['],
+            ['］', ']']
         ];
 
         text = replaceAndHighlight(text, replacements);

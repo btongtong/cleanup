@@ -145,6 +145,7 @@ def update_post(pid):
 def remove_post(pid):
     if 'pid' in session:
         DB.remove_post(pid)
+        DB.remove_post_comment(pid)
         session.pop('pid', None)
         return jsonify({'success': True})
     else:
