@@ -153,7 +153,7 @@ $(document).ready(function () {
             if (targetP.length > 0) {
                 targetP.append(imageHtml);
 
-                // 추가된 이미지 요소를 찾아서 그 다음에 커서를 위치시킵니다.
+                // 추가된 이미지 요소를 찾아서 그 다음에 커서를 위치
                 const imgElement = $(targetP).find('img:last');
                 if(imgElement.length > 0) {
                     const newRange = document.createRange();
@@ -171,7 +171,6 @@ $(document).ready(function () {
                 $('.editor').html('<p>'+imageHtml+'</p>');
             }
         }
-
     }
 
     function deleteImage(file_url){
