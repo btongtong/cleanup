@@ -5,7 +5,7 @@
 > **시각장애인을 위한 전자책 제작 보조 프로그램** <br> **개발 기간: 2024-06-20 ~ 2024-07-05**
 
 ## URL
-> **배포 URL: https://www.btongtong.store** <br>
+> **배포 URL: https://www.bttcleanup.store/posts/-OI6lAF4I7N2vz_jd7p7** <br>
 > **프로젝트 구현 기록 URL: https://noon-chance-53f.notion.site/CLEAN-UP-123cf60ac914815aa830da6655e66102?pvs=4**
 
 ## 프로젝트 소개
@@ -29,43 +29,6 @@
 ### 버전 관리
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-## 디렉토리 구조
-
-```
-📦 spell-check
-├─ .gitignore
-├─ README.m
-├─ app.py
-├─ db_handler.py
-├─ requirements.txt
-├─ .auth
-│  ├─ firebase_config.json
-│  └─ keys.xml
-├─ static
-│  ├─ css
-│  │  ├─ base.css
-│  │  ├─ index.css
-│  │  ├─ post.css
-│  │  ├─ post_edit.css
-│  │  ├─ post_new.css
-│  │  └─ posts.css
-│  ├─ image
-│  │  └─ logo.png
-│  └─ js
-│     ├─ base.js
-│     ├─ index.js
-│     ├─ post.js
-│     ├─ post_edit.js
-│     ├─ post_new.js
-│     └─ posts.js
-└─ templates
-   ├─ base.html
-   ├─ index.html
-   ├─ post.html
-   ├─ post_edit.html
-   ├─ post_new.html
-   └─ posts.html
-```
 ## 주요 기능
 ### 문자 교정
 - 부산대학교 맞춤법 검사기를 크롤링하여 글의 철자 및 문법 오류 검사
@@ -74,6 +37,46 @@
 ### 문의, 후기 게시판
 - 사용자들이 개선 사항 제안, 기능 추가 요청, 사용 후기 등을 자유롭게 작성할 수 있는 게시판 제공
 - 게시글 및 댓글 작성, 삭제, 수정 기능 구현
+
+## 데이터베이스 구조
+<table>
+    <tr>
+        <th style="text-align:center">게시글</th>
+        <th style="text-align:center">댓글</th>
+    </tr>
+    <tr>
+        <td><img width="1470" alt="게시글" src="https://github.com/user-attachments/assets/8e5e2725-befa-40b7-8887-0d9ff2642a61"></td>
+        <td><img width="1470" alt="댓글" src="https://github.com/user-attachments/assets/b5f7410f-8c20-4b2a-9970-d51780864579"></td>
+    </tr>
+</table>
+
+## 유저 플로우
+<table>
+    <tr>
+        <th style="text-align:center">텍스트 교정</th>
+        <th style="text-align:center">게시글 작성</th>
+    </tr>
+    <tr>
+        <td><img width="1470" alt="텍스트 교정" src="https://github.com/user-attachments/assets/a4a30841-617a-4f6a-970e-13b8c13465d9"></td>
+        <td><img width="1470" alt="게시글 검색" src="https://github.com/user-attachments/assets/619dfb18-66dd-4859-a634-c5f2db2fbf53"></td>
+    </tr>
+    <tr>
+        <th style="text-align:center">게시글 작성</th>
+        <th style="text-align:center">게시글 수정 & 삭제</th>
+    </tr>
+    <tr>
+        <td><img width="1470" alt="게시글 작성" src="https://github.com/user-attachments/assets/3c12d567-19ec-41ec-a9d2-01c82495a67b"></td>
+        <td><img width="1470" alt="게시글 수정 & 삭제" src="https://github.com/user-attachments/assets/11638f1c-2b64-4cf9-a9d5-65c08088f48a"></td>
+    </tr>
+    <tr>
+        <th style="text-align:center">댓글 작성</th>
+        <th style="text-align:center">댓글 수정 & 삭제</th>
+    </tr>
+    <tr>
+        <td><img width="1470" alt="댓글 작성" src="https://github.com/user-attachments/assets/e18e303d-e4fc-496a-83ef-4c92626c6d93"></td>
+        <td><img width="1470" alt="댓글 수정 & 삭제" src="https://github.com/user-attachments/assets/322e3654-1538-41d7-a4fb-9a21e6d17ffb"></td>
+    </tr>
+</table>
 
 ## 화면 구성
 <table>
