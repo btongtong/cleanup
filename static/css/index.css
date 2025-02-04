@@ -123,6 +123,10 @@
     z-index: 3;
 }
 
+#copy:hover, #paste:hover {
+    color: var(--blue-light-color);
+}
+
 .copy-confirm, .paste-confirm {
     display: none;
 }
