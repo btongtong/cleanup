@@ -158,10 +158,10 @@ $(document).ready(function () {
     // (「」) 변환
     $('#cornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/(?<![a-zA-Z])([r厂■])(?![a-zA-Z])/g, function (match) {
-            return '<span class="origin">' + match + '</span><span class="highlight">「</span>';
-        }).replace(/(?<![a-zA-Z])([Jj丄□])(?![a-zA-Z])/g, function (match) {
-            return '<span class="origin">' + match + '</span><span class="highlight">」</span>';
+        var result = text.replace(/(^|\s|[^a-zA-Z0-9])([r厂■])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
+            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">「</span>';
+        }).replace(/(^|\s|[^a-zA-Z0-9])([Jj丄□])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
+            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">」</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
@@ -169,10 +169,10 @@ $(document).ready(function () {
     // (『』) 변환
     $('#doubleCornerBracket').click(function () {
         var text = $('#inputText').val();
-        var result = text.replace(/(?<![a-zA-Z])([r厂■「])(?![a-zA-Z])/g, function (match) {
-            return '<span class="origin">' + match + '</span><span class="highlight">『</span>';
-        }).replace(/(?<![a-zA-Z])([Jj丄□」])(?![a-zA-Z])/g, function (match) {
-            return '<span class="origin">' + match + '</span><span class="highlight">』</span>';
+        var result = text.replace(/(^|\s|[^a-zA-Z0-9])([r厂■「])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
+            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">『</span>';
+        }).replace(/(^|\s|[^a-zA-Z0-9])([Jj丄□」])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
+            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">』</span>';
         });
         $('#outputText').html(result.replace(/\n/g, '<br>'));
     });
