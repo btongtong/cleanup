@@ -1,4 +1,5 @@
 import { errorMsg } from "./error_message.js";
+import { isValidPassword } from "./password.js";
 
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
@@ -56,13 +57,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    // 비밀번호 유효성 검사 함수
-    function isValidPassword(password) {
-        // 최소 6글자, 숫자 포함 여부, 문자 포함 여부
-        var regex = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/;
-        return regex.test(password);
-    }
 
     const editor = $('.editor');
 

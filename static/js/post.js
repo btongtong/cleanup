@@ -1,4 +1,5 @@
 import { errorMsg } from "./error_message.js";
+import { isValidPassword } from "./password.js";
 
 $(document).ready(function () {
     // pid 주소줄에서 가져오기
@@ -76,13 +77,6 @@ $(document).ready(function () {
     }
 
     loadComments();
-
-    // 비밀번호 유효성 검사 함수
-    function isValidPassword(password) {
-        // 최소 6글자, 숫자 포함 여부, 문자 포함 여부
-        var regex = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/;
-        return regex.test(password);
-    }
 
     // 댓글 작성 클릭 로직
     $('.comment-submit').click(function () {
