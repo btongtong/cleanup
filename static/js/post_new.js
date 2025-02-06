@@ -1,3 +1,5 @@
+import { errorMsg } from "./error_message.js";
+
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
 
@@ -10,13 +12,13 @@ $(document).ready(function () {
 
         // 필수 입력 필드가 비어 있는지 확인
         if (title === '' || content === '<p class="placeholder>글을 작성해주세요.</p>' || username === '' || password === '') {
-            alert('모든 항목을 작성해주세요.'); 
+            alert(errorMsg.fillOutError); 
             return;  
         }
 
         // 비밀번호 유효성 검사
         if (!isValidPassword(password)) {
-            alert('비밀번호는 문자와 숫자의 조합이며, 최소 6글자 이상이어야 합니다.');
+            alert(errorMsg.passwordFormatError);
             return;
         }
 
@@ -46,11 +48,11 @@ $(document).ready(function () {
                 if(response.success) {
                     window.location.href = '/posts/' + response.pid;
                 } else {
-                    alert('게시글 작성에 실패하였습니다.');
+                    alert(errorMsg.postCreateError);
                 }
             },
             error: function () {
-                alert('게시글 작성에 실패하였습니다. 나중에 다시 시도해주세요.');
+                alert(errorMsg.postCreateError);
             }
         });
     });
@@ -126,11 +128,11 @@ $(document).ready(function () {
                     // 업로드된 이미지 URL 배열에 추가
                     uploadedImages.push(imageUrl);
                 } else {
-                    alert('이미지 업로드에 실패하였습니다.');
+                    alert(errorMsg.imageUploadError);
                 }
             },
             error: function() {
-                alert('이미지 업로드에 실패하였습니다. 나중에 다시 시도해주세요.');
+                alert(errorMsg.imageUploadError);
             }
         });
     }
@@ -181,11 +183,11 @@ $(document).ready(function () {
                 if (response.success) {
                     
                 } else {
-                    alert("파일 삭제 실패.");
+                    alert(errorMsg.imageDeleteError);
                 }
             },
             error: function() {
-                alert("파일 삭제 실패. 나중에 다시 시도해주세요.");
+                alert(errorMsg.imageDeleteError);
             }
         });
     }

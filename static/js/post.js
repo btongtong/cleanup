@@ -1,3 +1,5 @@
+import { errorMsg } from "./error_message.js";
+
 $(document).ready(function () {
     // pid 주소줄에서 가져오기
     const pid = window.location.pathname.split('/')[2];
@@ -68,7 +70,7 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                alert('댓글을 가져오는데 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.commentGetError);
             }
         });
     }
@@ -90,13 +92,13 @@ $(document).ready(function () {
 
         // 필수 입력 필드가 비어 있는지 확인
         if (comment === '' || username === '' || password === '') {
-            alert('모든 항목을 작성해주세요.'); 
+            alert(errorMsg.fillOutError); 
             return;  
         }
 
         // 비밀번호 유효성 검사
         if (!isValidPassword(password)) {
-            alert('비밀번호는 문자와 숫자의 조합이며, 최소 6글자 이상이어야 합니다.');
+            alert(errorMsg.passwordFormatError);
             return;
         }
 
@@ -112,11 +114,11 @@ $(document).ready(function () {
                 if (response.success) {
                     loadComments();
                 } else {
-                    alert('댓글 작성에 실패하였습니다.');
+                    alert(errorMsg.commentSaveError);
                 }
             },
             error: function () {
-                alert('댓글 작성에 실패하였습니다. 나중에 다시 시도해주세요.');
+                alert(errorMsg.commentSaveError);
             }
         });
 
@@ -182,11 +184,11 @@ $(document).ready(function () {
                         deletePost(pid);
                     }
                 } else {
-                    alert('비밀번호 인증에 실패하였습니다.');
+                    alert(errorMsg.passwordWrongError);
                 }
             },
             error: function () {
-                alert('비밀번호 인증에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.passwordWrongError);
             }
         });
 
@@ -203,11 +205,11 @@ $(document).ready(function () {
                     alert('게시글 삭제 완료.');
                     window.location.href = '/posts';
                 } else {
-                    alert('게시글 삭제에 실패하였습니다.');
+                    alert(errorMsg.postDeleteError);
                 }
             },
             error: function () {
-                alert('게시글 삭제에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.postDeleteError);
             }
         });
         $('.back').click();
@@ -238,11 +240,11 @@ $(document).ready(function () {
                         deleteComment(pid, cid);
                     }
                 } else {
-                    alert('비밀번호 인증에 실패하였습니다.');
+                    alert(errorMsg.passwordWrongError);
                 }
             },
             error: function () {
-                alert('비밀번호 인증에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.passwordWrongError);
             }
         });
         $('.back').click();
@@ -258,11 +260,11 @@ $(document).ready(function () {
                     loadComments();
                     alert("댓글 삭제 완료.");
                 } else {
-                    alert('댓글 삭제에 실패하였습니다.');
+                    alert(errorMsg.commentDeleteError);
                 }
             },
             error: function () {
-                alert('댓글 삭제에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.commentDeleteError);
             }
         });
         $('.back').click();
@@ -275,7 +277,7 @@ $(document).ready(function () {
 
         // 필수 입력 필드가 비어 있는지 확인
         if (comment === '') {
-            alert('모든 항목을 작성해주세요.'); 
+            alert(errorMsg.fillOutError); 
             return;  
         }
 
@@ -289,11 +291,11 @@ $(document).ready(function () {
                 if (response.success) {
                     loadComments();
                 } else {
-                    alert('댓글 수정에 실패하였습니다.');
+                    alert(errorMsg.commentModifyError);
                 }
             },
             error: function () {
-                alert('댓글 수정에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.commentModifyError);
             }
         });
     })

@@ -1,5 +1,6 @@
-$(document).ready(function () {
+import { errorMsg } from "./error_message.js";
 
+$(document).ready(function () {
     // 맞춤법 검사
     $('#grammar').click(function () {
         var text = $('#inputText').val();
@@ -41,12 +42,12 @@ $(document).ready(function () {
 
                     $('#outputText').html(correctedText.replace(/\n/g, '<br>'));
                 } else {
-                    alert('맞춤법 교정에 실패하였습니다.');
+                    alert(errorMsg.spellingError);
                 }
             },
             error: function () {
                 $('#outputText').text('');
-                alert('맞춤법 교정에 실패하였습니다. 다음에 다시 시도해주세요.');
+                alert(errorMsg.spellingError);
             }
         });
     });
@@ -190,7 +191,7 @@ $(document).ready(function () {
             var newText = text.substring(0, start) + '<span class="origin">' + selectedText + '</span><span class="highlight">' + leftBracket + selectedText + rightBracket + '</span>' + text.substring(end);
             $('#outputText').html(newText.replace(/\n/g, '<br>'));
         } else {
-            alert('원하는 부분을 먼저 드래그해주세요.');
+            alert(errorMsg.dragError);
         }
     }
 

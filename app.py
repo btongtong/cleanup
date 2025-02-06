@@ -56,7 +56,6 @@ def check_spell():
 
     # json_data 프론트로 보내기
     if json_data:
-        print(json_data)
         error_words = [error for result in json_data for error in result['errInfo']]
         return jsonify({'success': True, 'data': error_words})
     else:

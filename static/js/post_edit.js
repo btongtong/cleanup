@@ -1,3 +1,5 @@
+import { errorMsg } from "./error_message.js";
+
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
     // 이미 작성된 이미지 담기
@@ -13,7 +15,7 @@ $(document).ready(function () {
 
         // 필수 입력 필드가 비어 있는지 확인
         if (title === '' || content === '<p class="placeholder">내용을 입력하세요.</p>') {
-            alert('모든 항목을 작성해주세요.');
+            alert(errorMsg.fillOutError);
             return;
         }
 
@@ -41,11 +43,11 @@ $(document).ready(function () {
                 if(response.success) {
                     window.location.href = '/posts/' + pid;
                 } else {
-                    alert('게시글 수정에 실패하였습니다.');
+                    alert(errorMsg.postModifyError);
                 }
             },
             error: function () {
-                alert('게시글 수정에 실패하였습니다. 나중에 다시 시도해주세요.');
+                alert(errorMsg.postModifyError);
             }
         });
     });
@@ -113,11 +115,11 @@ $(document).ready(function () {
                     // 업로드된 이미지 URL 배열에 추가
                     uploadedImages.push(imageUrl);
                 } else {
-                    alert('이미지 업로드에 실패하였습니다.');
+                    alert(errorMsg.imageUploadError);
                 }
             },
             error: function() {
-                alert('이미지 업로드에 실패하였습니다. 나중에 다시 시도해주세요.');
+                alert(errorMsg.imageUploadError);
             }
         });
     }
@@ -168,11 +170,11 @@ $(document).ready(function () {
                 if (response.success) {
                     // 삭제 성공 처리
                 } else {
-                    alert("파일 삭제 실패.");
+                    alert(errorMsg.imageDeleteError);
                 }
             },
             error: function() {
-                alert("파일 삭제 실패. 나중에 다시 시도해주세요.");
+                alert(errorMsg.imageDeleteError);
             }
         });
     }
