@@ -12,5 +12,6 @@ export const errorMsg = {
     imageUploadError: "이미지 업로드에 실패하였습니다.",
     imageDeleteError: "이미지 삭제에 실패하였습니다.",
     passwordFormatError: "비밀번호는 문자와 숫자의 조합이며, 최소 6글자 이상이어야 합니다.",
-    passwordWrongError: "비밀번호 인증에 실패하였습니다."
+    passwordWrongError: "비밀번호 인증에 실패하였습니다.",
+    serverError: "나중에 다시 시도해주세요."
 }

@@ -26,7 +26,6 @@ def check_spell():
     # form에서 데이터 가져오기
     origin_text = request.form['text'].replace('\n', '\r')  # 줄바꿈 처리를 인식 못해서 비교해봤더니 맞춤법 검사기는 \r 을 줄바꿈 표시로 인식하고 있어서 줄바꿈을 다 \r로 바꿔주기
 
-    print(origin_text)
     # BOM 제거
     origin_text = origin_text.replace('\ufeff', ' ')
 
@@ -152,7 +151,6 @@ def remove_post(pid):
 @app.route('/posts/<string:pid>/comments', methods=['GET'])
 def get_comments(pid):
     comments = DB.get_comments(pid)
-    print(comments)
     return jsonify({'success': True, 'data': comments})
 
 @app.route('/posts/<string:pid>/comments/new', methods=['POST'])

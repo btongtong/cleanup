@@ -1,5 +1,7 @@
 import { errorMsg } from "./error_message.js";
 import { isValidPassword } from "./password.js";
+import { getComments, saveComment, checkCommentPassword, modifyComment, deleteComment } from "./comment_api.js";
+import { createCommentElement, createEditCommentElement, createNoCommentElement } from "./commentElements.js";
 
 $(document).ready(function () {
     // pid 주소줄에서 가져오기
@@ -7,82 +9,33 @@ $(document).ready(function () {
     // 삭제, 수정 판단할 변수
     let action = '';
 
-    // 댓글 리스트
-    function loadComments() {
-        $.ajax({
-            type: 'GET',
-            url: '/posts/' + pid + '/comments',
-            success: function (response) {
-                if (response.success) {
-                    const commentsArray = response.data;
-                    const commentList = $("#commentList");
-                    commentList.empty(); // 존재하는 댓글들 지우기
-
-                    // 댓글 리스트
-                    commentsArray.forEach(function ([key, comment]) {
-                        const commentItem = $("<li>")
-                            .attr("data-key", key)
-                            .append(
-                                $("<div>").addClass("comment-list-top")
-                                    .append(
-                                        $("<div>").addClass("comment-writer-datetime-box")
-                                            .append($("<p>").addClass("writer").text(comment.username))
-                                            .append($("<p>").addClass("datetime").text(comment.datetime.split('T')[0] + " " + comment.datetime.split('T')[1].substring(0, 5)))
-                                    )
-                                    .append(
-                                        $("<div>").addClass("comment-menu-btn")
-                                            .append(
-                                                $("<div>").addClass("comment-menu-icon")
-                                                    .append($("<i>").addClass("fa-solid fa-ellipsis-vertical"))
-                                            )
-                                            .append(
-                                                $("<div>").addClass("comment-btn-container")
-                                                    .append($("<button>").addClass("update-comment").text("수정"))
-                                                    .append($("<button>").addClass("delete-comment").text("삭제"))
-                                            )
-                                    )
-                            )
-                            .append(
-                                $("<div>").addClass("comment-content").text(comment.comment)
-                            );
-
-                        // 댓글 수정 리스트
-                        const commentEditItem = $("<li>")
-                            .attr("data-key", key)
-                            .addClass("edit-comment")
-                            .append(
-                                $("<div>").addClass("comment-list-top")
-                                    .append(
-                                        $("<div>").addClass("comment-writer-datetime-box")
-                                            .append($("<p>").addClass("writer").text(comment.username))
-                                            .append($("<p>").addClass("datetime").text(comment.datetime))
-                                    )
-                            )
-                            .append(
-                                $("<div>").addClass("edit-comment-content-box")
-                                    .append($("<textarea>").addClass("edit-commnet").text(comment.comment))
-                                    .append($("<button>").addClass("comment-confirm").text("수정"))
-                            );
-
-                        commentList.append(commentItem).append(commentEditItem);
+    // 댓글 리스트 가져오기
+    function getCommentList () {
+        getComments(pid,
+            (response) => {
+                const commentList = $("#commentList");
+                commentList.empty();
+    
+                if (response.data.length > 0) {
+                    response.data.forEach(([key, comment]) => {
+                        commentList.append(createCommentElement(key, comment))
+                                .append(createEditCommentElement(key, comment));
                     });
                 } else {
-                    commentList.append("<li>댓글이 없습니다.</li>");
+                    commentList.append(createNoCommentElement());
                 }
             },
-            error: function () {
-                alert(errorMsg.commentGetError);
-            }
-        });
+            (response) => alert(errorMsg.commentGetError)
+        );
     }
 
-    loadComments();
+    getCommentList();
 
     // 댓글 작성 클릭 로직
     $('.comment-submit').click(function () {
-        var comment = $('#comment').val().trim();
-        var username = $('#cUsername').val().trim()
-        var password = $('#cPassword').val().trim()
+        const comment = $('#comment').val().trim();
+        const username = $('#cUsername').val().trim();
+        const password = $('#cPassword').val().trim();
 
         // 필수 입력 필드가 비어 있는지 확인
         if (comment === '' || username === '' || password === '') {
@@ -96,25 +49,11 @@ $(document).ready(function () {
             return;
         }
 
-        $.ajax({
-            type: 'POST',
-            url: '/posts/' + pid + '/comments/new',
-            data: {
-                comment: comment,
-                username: username,
-                password: password
-            },
-            success: function (response) {
-                if (response.success) {
-                    loadComments();
-                } else {
-                    alert(errorMsg.commentSaveError);
-                }
-            },
-            error: function () {
-                alert(errorMsg.commentSaveError);
-            }
-        });
+        saveComment(pid, 
+            { comment: comment, username: username, password: password }, 
+            getCommentList,
+            (response) =>  alert(errorMsg.commentSaveError)
+        );
 
         $('#comment').val('');
         $('#cUsername').val('');
@@ -212,62 +151,46 @@ $(document).ready(function () {
     // 댓글 비밀번호 인증 
     $('#commentPasswordSubmit').click(function () {
         const cid = $('.comment.confirm-box').data('cid');
-        var password = $('#commentPassword').val();
+        const password = $('#commentPassword').val();
         $('.comment.confirm-box').hide();
         $('#commentPassword').val('');
 
-        $.ajax({
-            type: 'POST',
-            url: '/posts/' + pid + '/comments/' + cid + '/check-password',
-            data: {
-                password: password
-            },
-            success: function (response) {
+        checkCommentPassword(
+            pid, 
+            cid, 
+            {password: password}, 
+            (response) => {
+                if (action === 'update') {
+                    $(`#commentList li[data-key="${cid}"].edit-comment`).show();
+                    $(`#commentList li[data-key="${cid}"]:not(.edit-comment)`).hide();
 
-                if (response.success) {
-                    if (action === 'update') {
-                        $(`#commentList li[data-key="${cid}"].edit-comment`).show();
-                        $(`#commentList li[data-key="${cid}"]:not(.edit-comment)`).hide();
-
-                        $('.edit-comment textarea').focus();
-                    } else {
-                        deleteComment(pid, cid);
-                    }
+                    $('.edit-comment-content-box textarea').focus();
                 } else {
-                    alert(errorMsg.passwordWrongError);
+                    removeComment(pid, cid);
                 }
             },
-            error: function () {
-                alert(errorMsg.passwordWrongError);
-            }
-        });
+            (response) => alert(errorMsg.passwordWrongError)
+        );
+
         $('.back').click();
     });
 
     // 댓글 삭제 로직
-    function deleteComment(pid, cid) {
-        $.ajax({
-            type: 'DELETE',
-            url: '/posts/' + pid + '/comments/' + cid + '/delete',
-            success: function (response) {
-                if (response.success) {
-                    loadComments();
-                    alert("댓글 삭제 완료.");
-                } else {
-                    alert(errorMsg.commentDeleteError);
-                }
-            },
-            error: function () {
-                alert(errorMsg.commentDeleteError);
-            }
-        });
+    function removeComment(pid, cid) {
+        deleteComment(
+            pid,
+            cid,
+            getCommentList,
+            (response) => alert(errorMsg.commentDeleteError)
+        );
+        
         $('.back').click();
     }
 
     // 댓글 수정 로직
     $(document).on('click', '.comment-confirm', function () {
         const cid = $(this).closest('li.edit-comment').data('key');
-        var comment = $('.edit-commnet').val().trim();
+        var comment = $('.edit-comment-content-box textarea').val().trim();
 
         // 필수 입력 필드가 비어 있는지 확인
         if (comment === '') {
@@ -275,23 +198,13 @@ $(document).ready(function () {
             return;  
         }
 
-        $.ajax({
-            type: 'PUT',
-            url: '/posts/' + pid + '/comments/' + cid + '/edit',
-            data: {
-                comment: comment
-            },
-            success: function (response) {
-                if (response.success) {
-                    loadComments();
-                } else {
-                    alert(errorMsg.commentModifyError);
-                }
-            },
-            error: function () {
-                alert(errorMsg.commentModifyError);
-            }
-        });
+        modifyComment(
+            pid, 
+            cid, 
+            {comment: comment},
+            getCommentList,
+            (response) => alert(errorMsg.commentModifyError)
+        );
     })
 
     // 게시글 목록 가기 버튼 클릭
