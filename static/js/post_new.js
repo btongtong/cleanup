@@ -1,5 +1,8 @@
+import { url } from "./url.js";
 import { errorMsg } from "./error_message.js";
 import { isValidPassword } from "./password.js";
+import { createNoContentElement } from "./post_elements.js";
+import { savePost } from "./post_api.js";
 
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
@@ -12,7 +15,7 @@ $(document).ready(function () {
         var password = $('#password').val().trim();
 
         // 필수 입력 필드가 비어 있는지 확인
-        if (title === '' || content === '<p class="placeholder>글을 작성해주세요.</p>' || username === '' || password === '') {
+        if (title === '' || content === createNoContentElement() || username === '' || password === '') {
             alert(errorMsg.fillOutError); 
             return;  
         }
@@ -36,26 +39,11 @@ $(document).ready(function () {
             }
         });
 
-        $.ajax({
-            type: 'POST',
-            url: '/post/new',
-            data: { 
-                title: title, 
-                content: content,
-                username: username,
-                password: password
-            },
-            success: function (response) {
-                if(response.success) {
-                    window.location.href = '/posts/' + response.pid;
-                } else {
-                    alert(errorMsg.postCreateError);
-                }
-            },
-            error: function () {
-                alert(errorMsg.postCreateError);
-            }
-        });
+        savePost(
+            { title: title, content: content, username: username, password: password}, 
+            (response) => window.location.href = url.getPost(response.pid),
+            (response) =>  alert(errorMsg.postCreateError)
+        );
     });
 
     const editor = $('.editor');

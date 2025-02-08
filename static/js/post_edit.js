@@ -1,3 +1,5 @@
+import { url } from "./url.js";
+import { modifyPost } from "./post_api.js";
 import { errorMsg } from "./error_message.js";
 
 $(document).ready(function () {
@@ -32,24 +34,12 @@ $(document).ready(function () {
             }
         });
 
-        $.ajax({
-            type: 'PUT',
-            url: '/posts/' + pid + '/edit',
-            data: { 
-                title: title,
-                content: content
-            },
-            success: function (response) {
-                if(response.success) {
-                    window.location.href = '/posts/' + pid;
-                } else {
-                    alert(errorMsg.postModifyError);
-                }
-            },
-            error: function () {
-                alert(errorMsg.postModifyError);
-            }
-        });
+        modifyPost(
+            pid,
+            {title: title, content: content},
+            (response) => window.location.href = url.modifyPost(pid),
+            (response) => alert(errorMsg.postModifyError)
+        );
     });
 
     const editor = $('.editor');

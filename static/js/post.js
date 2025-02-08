@@ -1,7 +1,9 @@
+import { url } from "./url.js";
 import { errorMsg } from "./error_message.js";
 import { isValidPassword } from "./password.js";
+import { checkPostPassword, deletePost } from "./post_api.js";
 import { getComments, saveComment, checkCommentPassword, modifyComment, deleteComment } from "./comment_api.js";
-import { createCommentElement, createEditCommentElement, createNoCommentElement } from "./commentElements.js";
+import { createCommentElement, createEditCommentElement, createNoCommentElement } from "./comment_elements.js";
 
 $(document).ready(function () {
     // pid 주소줄에서 가져오기
@@ -49,7 +51,8 @@ $(document).ready(function () {
             return;
         }
 
-        saveComment(pid, 
+        saveComment(
+            pid, 
             { comment: comment, username: username, password: password }, 
             getCommentList,
             (response) =>  alert(errorMsg.commentSaveError)
@@ -103,48 +106,33 @@ $(document).ready(function () {
     $('#postPasswordSubmit').click(function () {
         var password = $('#password').val();
 
-        $.ajax({
-            type: 'POST',
-            url: '/posts/' + pid + '/check-password',
-            data: {
-                password: password
-            },
-            success: function (response) {
-                if (response.success) {
-                    if (action === 'update') {
-                        window.location.href = '/posts/' + pid + '/edit';
-                    } else {
-                        deletePost(pid);
-                    }
+        checkPostPassword(
+            pid, 
+            {password: password}, 
+            (response) => {
+                if (action === 'update') {
+                    window.location.href = url.modifyPost(pid);
                 } else {
-                    alert(errorMsg.passwordWrongError);
+                    removePost(pid);
                 }
             },
-            error: function () {
-                alert(errorMsg.passwordWrongError);
-            }
-        });
+            (response) => alert(errorMsg.passwordWrongError)
+        );
 
         $('.back').click();
     });
 
     // 게시글 삭제 로직
-    function deletePost(pid) {
-        $.ajax({
-            type: 'DELETE',
-            url: '/posts/' + pid + '/delete',
-            success: function (response) {
-                if (response.success) {
-                    alert('게시글 삭제 완료.');
-                    window.location.href = '/posts';
-                } else {
-                    alert(errorMsg.postDeleteError);
-                }
+    function removePost(pid) {
+        deletePost(
+            pid,
+            (response) => {
+                alert('게시글 삭제 완료.');
+                window.location.href = url.getPosts()
             },
-            error: function () {
-                alert(errorMsg.postDeleteError);
-            }
-        });
+            (response) => alert(errorMsg.postDeleteError)
+        );
+
         $('.back').click();
     }
 
@@ -209,7 +197,7 @@ $(document).ready(function () {
 
     // 게시글 목록 가기 버튼 클릭
     $('.get-posts-btn').click(function () {
-        window.location.href = '/posts';
+        window.location.href = url.getPosts();
     })
 
     // 게시글 삭제, 수정 버튼 창 띄우기

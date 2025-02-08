@@ -1,7 +1,9 @@
+import { url } from "./url.js";
+
 $(document).ready(function () {
     // 댓글 작성 버튼 클릭
     $('.post-write-btn').click(function () {
-        window.location.href = '/post/new';
+        window.location.href = url.savePost();
     })
 
     // 검색 버튼 클릭
