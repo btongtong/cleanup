@@ -35,4 +35,24 @@ function no_data_api(type, url, onSuccess, onFail) {
     });
 }
 
-export { data_api, no_data_api }
+function file_data_api(type, url, data, onSuccess, onFail) {
+    $.ajax({
+        type: type,
+        url: url,
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if (response.success) {
+                onSuccess(response);
+            } else {
+                onFail(response);
+            }
+        },
+        error: function () {
+            alert(errorMsg.serverError);
+        }
+    });
+}
+
+export { data_api, no_data_api, file_data_api }

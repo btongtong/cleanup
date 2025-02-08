@@ -9,5 +9,7 @@ export const url = {
     saveComment: (pid) => `/posts/${pid}/comments/new`,
     modifyComment: (pid, cid) => `/posts/${pid}/comments/${cid}/edit`,
     deleteComment: (pid, cid) => `/posts/${pid}/comments/${cid}/delete`,
-    checkCommentPassword: (pid, cid) => `/posts/${pid}/comments/${cid}/check-password`
+    checkCommentPassword: (pid, cid) => `/posts/${pid}/comments/${cid}/check-password`,
+    saveFile: () => `/file/upload`,
+    deleteFile: (url) => `/file/${url}/delete`
 }

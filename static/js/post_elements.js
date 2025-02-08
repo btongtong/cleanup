@@ -1,7 +1,11 @@
 function createNoContentElement() {
-    return $(`
-        <p class="placeholder>글을 작성해주세요.</p>
-    `);
+    return '<p class="placeholder">글을 작성해주세요.</p>';
 }
 
-export { createNoContentElement }
+function createImageElement(url) {
+    return $(`
+        <img src="${url}"/>
+    `)
+}
+
+export { createNoContentElement, createImageElement }

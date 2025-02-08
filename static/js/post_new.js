@@ -1,18 +1,19 @@
 import { url } from "./url.js";
+import { savePost } from "./post_api.js";
 import { errorMsg } from "./error_message.js";
 import { isValidPassword } from "./password.js";
-import { createNoContentElement } from "./post_elements.js";
-import { savePost } from "./post_api.js";
+import { saveImage, deleteImage } from "./file_api.js";
+import { createNoContentElement, createImageElement } from "./post_elements.js";
 
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
 
     // 게시글 등록 로직
     $('#postSubmit').click(function () {
-        var title = $('textarea.title').val().trim();  // trim()을 사용하여 양쪽 공백 제거
-        var content = $('.editor').html();
-        var username = $('#username').val().trim();
-        var password = $('#password').val().trim();
+        const title = $('textarea.title').val().trim();  // trim()을 사용하여 양쪽 공백 제거
+        const content = $('.editor').html();
+        const username = $('#username').val().trim();
+        const password = $('#password').val().trim();
 
         // 필수 입력 필드가 비어 있는지 확인
         if (title === '' || content === createNoContentElement() || username === '' || password === '') {
@@ -35,7 +36,7 @@ $(document).ready(function () {
         // 삭제된 이미지를 찾아 서버에서 삭제
         uploadedImages.forEach(function(imageUrl) {
             if (!currentImages.includes(imageUrl)) {
-                deleteImage(imageUrl);
+                removeImage(imageUrl);
             }
         });
 
@@ -91,32 +92,20 @@ $(document).ready(function () {
 
     // 이미지 업로드 함수
     function uploadImage(file) {
-        var formData = new FormData();
-        formData.append('image', file);
+        var data = new FormData();
+        data.append('image', file);
 
-        $.ajax({
-            type: 'POST',
-            url: '/file/upload',  // 이미지 업로드 처리를 담당하는 Flask 라우트 URL
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.success) {
-                    console.log("success");
-                    var imageUrl = response.url;
-                    var imageHtml = '<img src="' + imageUrl + '"/>';
-                    // 이미지 넣기
-                    insertImage(imageHtml);
-                    // 업로드된 이미지 URL 배열에 추가
-                    uploadedImages.push(imageUrl);
-                } else {
-                    alert(errorMsg.imageUploadError);
-                }
+        saveImage(
+            data,
+            (response) => {
+                const url = response.url;
+                // 이미지 넣기
+                insertImage(createImageElement(url));
+                // 업로드된 이미지 URL 배열에 추가
+                uploadedImages.push(url);
             },
-            error: function() {
-                alert(errorMsg.imageUploadError);
-            }
-        });
+            (response) => alert(errorMsg.imageUploadError)
+        );
     }
 
     // 이미지를 특정 <p> 태그 내에 삽입하는 함수
@@ -157,20 +146,11 @@ $(document).ready(function () {
         }
     }
 
-    function deleteImage(file_url){
-        $.ajax({
-            type: 'DELETE',
-            url: `/file/${encodeURIComponent(file_url)}/delete`,
-            success: function(response) {
-                if (response.success) {
-                    
-                } else {
-                    alert(errorMsg.imageDeleteError);
-                }
-            },
-            error: function() {
-                alert(errorMsg.imageDeleteError);
-            }
-        });
+    function removeImage(url){
+        deleteImage(
+            encodeURIComponent(url),
+            (response) => {},
+            (response) => alert(errorMsg.imageDeleteError)
+        );
     }
 })
