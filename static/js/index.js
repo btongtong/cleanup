@@ -1,282 +1,255 @@
 import { errorMsg } from "./error_message.js";
 
-$(document).ready(function () {
-    // 맞춤법 검사
-    $('#grammar').click(function () {
-        var text = $('#inputText').val();
+// 특수문자 매핑 설정
+const SPECIAL_CHAR_MAPPINGS = {
+    regExpBrackets: {
+        smallQuote: { regExp: /['‘]([^'‘’]+)['’]/g, open: '‘', close: '’' },
+        quote: { regExp: /["“]([^"“”]+)["”]/g, open: '“', close: '”' },
+        triangle: { regExp: /<([^>]+)>/g, open: '〈', close: '〉' },
+        doubleTriangle: { regExp: /<<([^>]+)>>/g, open: '《', close: '》' },
+        corner: { regExp: /[r厂■]([^\s]*)[Jj丄□]/g, open: '「', close: '」' },
+        doubleCorner: { regExp: /[r厂■「]([^\s]*)[Jj丄□」]/g, open: '『', close: '』' }
+    },
+    brackets: {
+        regular: { open: '(', close: ')' },
+        smallQuote: { open: '‘', close: '’' },
+        quote: { open: '“', close: '”' },
+        triangle: { open: '〈', close: '〉' },
+        doubleTriangle: { open: '《', close: '》' },
+        corner: { open: '「', close: '」' },
+        doubleCorner: { open: '『', close: '』' }
+    },
+    combinations: [
+        ['〜', '~'],
+        ['，', ','],
+        ['！', '!'],
+        ['：', ':'],
+        ['；', ';'],
+        ['···', '…'],
+        ['...', '…'],
+        ['•••', '…'],
+        ['（', '('],
+        ['）', ')'],
+        ['［', '['],
+        ['］', ']']
+    ]
+};
 
-        $('#outputText').html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
-        $.ajax({
-            type: 'POST',
-            url: '/check-spell',
-            data: { text: text },
-            success: function (response) {
-                if (response.success) {
-                    var data = response.data;
+// 유틸리티 함수들
+const TextUtils = {
+    // 텍스트를 하이라이트된 형식으로 변환
+    createHighlightedSpan(original, highlighted) {
+        return `<span class="origin">${original}</span><span class="highlight">${highlighted}</span>`;
+    },
 
-                    var correctedText = text;
-                    var offset = 0; // 교정에 따라 인덱스를 조정하기 위한 오프셋
+    // 줄바꿈을 HTML <br> 태그로 변환
+    convertNewlines(text) {
+        return text.replace(/\n/g, '<br>');
+    }
+};
 
-                    data.forEach(function (error) {
-                        var orgStr = error['orgStr'];
-                        var candWord = error['candWord'];
-                        var start = error['start'] + offset;
-                        var end = error['end'] + offset;
-
-                        if (candWord == '') return;
-
-                        // 교정된 문자열 생성
-                        var originalLength = end - start;
-                        var replacement = '<span class="origin">' + orgStr + '</span>' +
-                            '<span class="highlight">' + candWord + '</span>';
-                        var replacementLength = replacement.length;
-
-                        // 교정된 텍스트로 대체
-                        correctedText = correctedText.substring(0, start) +
-                            replacement +
-                            correctedText.substring(end);
-
-                        // 인덱스 오프셋 업데이트
-                        offset += replacementLength - originalLength;
-                    });
-
-                    $('#outputText').html(correctedText.replace(/\n/g, '<br>'));
-                } else {
-                    alert(errorMsg.spellingError);
-                }
-            },
-            error: function () {
-                $('#outputText').text('');
-                alert(errorMsg.spellingError);
-            }
-        });
-    });
-
-    // 특수문자 변환 및 원본 <span> 태그로 감싸기
-    function replaceAndHighlight(text, replacements) {
-        replacements.forEach(([searchValue, newValue]) => {
-            text = text.split(searchValue)
-                .join('<span class="origin">' + searchValue + '</span><span class="highlight">' + newValue + '</span>');
-        });
-        return text;
+// 텍스트 처리 클래스
+class TextProcessor {
+    constructor(inputSelector, outputSelector) {
+        this.inputElement = $(inputSelector);
+        this.outputElement = $(outputSelector);
+        this.setupEventListeners();
     }
 
-    $('#combination').click(function () {
-        var text = $('#inputText').val();
-        var replacements = [
-            ['〜', '~'],
-            ['，', ','],
-            ['！', '!'],
-            ['：', ':'],
-            ['；', ';'],
-            ['···', '…'],
-            ['...', '…'],
-            ['•••', '…'],
-            ['（', '('],
-            ['）', ')'],
-            ['［', '['],
-            ['］', ']']
-        ];
-
-        text = replaceAndHighlight(text, replacements);
-        text = text.replace(/\n/g, '<br>');
-
-        $('#outputText').html(text);
-    });
-
-    // (<>) 변환
-    $('#triangleBracket').click(function () {
-        var text = $('#inputText').val();
-        var newText = text.replace(/</g, '〈change').replace(/>/g, '〉change').replace(/〈change/g, '<span class="origin">&lt;</span><span class="highlight">〈</span>').replace(/〉change/g, '<span class="origin">&gt;</span><span class="highlight">〉</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
-    });
-
-    // (《》) 변환
-    $('#doubleTriangleBracket').click(function () {
-        var text = $('#inputText').val();
-        var newText = text.replace(/<</g, '《change').replace(/>>/g, '》change').replace(/《change/g, '<span class="origin">&lt;&lt;</span><span class="highlight">《</span>').replace(/》change/g, '<span class="origin">&gt;&gt;</span><span class="highlight">》</span>');
-        $('#outputText').html(newText.replace(/\n/g, '<br>'));
-    });
-
-    // (“”) 변환
-    $('#quote').click(function () {
-        var text = $('#inputText').val();
-        let result = '';
-        let inQuote = false;
-
-        for (let i = 0; i < text.length; i++) {
-            if (text[i] === '“') {
-                result += text[i];
-                inQuote = true;
-            } else if (text[i] === '”') {
-                result += text[i];
-                inQuote = false;
-            } else if (text[i] === '"') {
-                result += '<span class="origin">' + text[i] + '</span>';
-                result += (inQuote) ? '<span class="highlight">”</span>' : '<span class="highlight">“</span>';
-                inQuote = !inQuote;
-            } else {
-                result += text[i];
-            }
-        }
-        $('#outputText').html(result.replace(/\n/g, '<br>'));
-    });
-
-    // (‘’) 변환
-    $('#smallQuote').click(function () {
-        var text = $('#inputText').val();
-        let result = '';
-        let inQuote = false;
-
-        for (let i = 0; i < text.length; i++) {
-            if (text[i] === '‘') {
-                result += text[i];
-                inQuote = true;
-            } else if (text[i] === '’') {
-                if (i !== 0 && i != text.length - 1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                    result += '<span class="origin">' + text[i] + '</span>';
-                    result += '<span class="highlight">&#39;</span>';
-                } else {
-                    result += text[i];
-                    inQuote = false;
-                }
-            } else if (text[i] === '\'') {
-                result += '<span class="origin">' + text[i] + '</span>';
-
-                if (i !== 0 && i != text.length - 1 && /[a-zA-Z]/.test(text[i - 1]) && /[a-zA-Z]/.test(text[i + 1])) {
-                    result += '<span class="highlight">&#39;</span>';
-                } else {
-                    result += (inQuote) ? '<span class="highlight">’</span>' : '<span class="highlight">‘</span>';
-                    inQuote = !inQuote;
-                }
-            } else {
-                result += text[i];
-            }
-        }
-        $('#outputText').html(result.replace(/\n/g, '<br>'));
-    });
-
-    // (「」) 변환
-    $('#cornerBracket').click(function () {
-        var text = $('#inputText').val();
-        var result = text.replace(/(^|\s|[^a-zA-Z0-9])([r厂■])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
-            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">「</span>';
-        }).replace(/(^|\s|[^a-zA-Z0-9])([Jj丄□])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
-            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">」</span>';
+    // 이벤트 리스너 설정
+    setupEventListeners() {
+        // 하이라이트 클릭 이벤트
+        this.outputElement.on('click', '.highlight', function() {
+            $(this).hide().prev('.origin').show();
         });
-        $('#outputText').html(result.replace(/\n/g, '<br>'));
-    });
 
-    // (『』) 변환
-    $('#doubleCornerBracket').click(function () {
-        var text = $('#inputText').val();
-        var result = text.replace(/(^|\s|[^a-zA-Z0-9])([r厂■「])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
-            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">『</span>';
-        }).replace(/(^|\s|[^a-zA-Z0-9])([Jj丄□」])(?=[^a-zA-Z0-9]|\s|$)/g, function (match, p1, p2) {
-            return p1 + '<span class="origin">' + p2 + '</span><span class="highlight">』</span>';
+        // 원본 클릭 이벤트
+        this.outputElement.on('click', '.origin', function() {
+            $(this).hide().next('.highlight').show();
         });
-        $('#outputText').html(result.replace(/\n/g, '<br>'));
-    });
+    }
 
+    // 맞춤법 검사 수행
+    async checkGrammar() {
+        const text = this.inputElement.val();
+        this.outputElement.html('<strong>맞춤법 검사를 진행하고 있습니다.</strong>');
 
-    // 드래그 한 부분을 감싸는 지정 괄호 변환 함수
-    function wrapTextWithBrackets(leftBracket, rightBracket) {
-        var textarea = $('#inputText')[0];
-        var start = textarea.selectionStart;
-        var end = textarea.selectionEnd;
+        try {
+            const response = await $.ajax({
+                type: 'POST',
+                url: '/check-spell',
+                data: { text }
+            });
 
-        if (start !== end) {
-            var text = textarea.value;
-            var selectedText = text.substring(start, end);
-            var newText = text.substring(0, start) + '<span class="origin">' + selectedText + '</span><span class="highlight">' + leftBracket + selectedText + rightBracket + '</span>' + text.substring(end);
-            $('#outputText').html(newText.replace(/\n/g, '<br>'));
-        } else {
+            if (response.success) {
+                this.processGrammarResponse(response.data, text);
+            } else {
+                throw new Error(errorMsg.spellingError);
+            }
+        } catch (error) {
+            this.outputElement.text('');
+            alert(errorMsg.spellingError);
+        }
+    }
+
+    // 맞춤법 검사 결과 처리
+    processGrammarResponse(data, originalText) {
+        let correctedText = originalText;
+        let offset = 0;
+
+        data.forEach(error => {
+            if (!error.candWord) return;
+
+            const start = error.start + offset;
+            const end = error.end + offset;
+            const replacement = TextUtils.createHighlightedSpan(error.orgStr, error.candWord);
+            
+            correctedText = correctedText.substring(0, start) +
+                        replacement +
+                        correctedText.substring(end);
+            
+            offset += replacement.length - (end - start);
+        });
+
+        this.outputElement.html(TextUtils.convertNewlines(correctedText));
+    }
+
+    // 특수문자 변환
+    convertSpecialCharacters() {
+        const text = this.inputElement.val();
+        let processedText = text;
+
+        SPECIAL_CHAR_MAPPINGS.combinations.forEach(([search, replace]) => {
+            processedText = processedText.split(search)
+                .join(TextUtils.createHighlightedSpan(search, replace));
+        });
+
+        this.outputElement.html(TextUtils.convertNewlines(processedText));
+    }
+
+    // 텍스트를 특정 기호 규칙에 맞게 변환
+    convertSign(type) {
+        const inputText = $('#inputText').val();
+        const { regExp, open, close } = SPECIAL_CHAR_MAPPINGS.regExpBrackets[type];
+        
+        const newText = inputText.replace(regExp, (match, group1) =>
+            `${TextUtils.createHighlightedSpan(match, open + group1 + close)}`
+        );
+        
+        $('#outputText').html(TextUtils.convertNewlines(newText));
+    }
+
+    // 드레그한 텍스트를 괄호로 감싸기
+    wrapWithBrackets(leftBracket, rightBracket) {
+        const textarea = this.inputElement[0];
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+
+        if (start === end) {
             alert(errorMsg.dragError);
+            return;
+        }
+
+        const text = textarea.value;
+        const selectedText = text.substring(start, end);
+        const wrappedText = TextUtils.createHighlightedSpan(
+            selectedText,
+            leftBracket + selectedText + rightBracket
+        );
+
+        const newText = text.substring(0, start) + wrappedText + text.substring(end);
+        this.outputElement.html(TextUtils.convertNewlines(newText));
+    }
+}
+
+// 클립보드 관리 클래스
+class ClipboardManager {
+    constructor(copyButtonSelector, pasteButtonSelector, inputSelector, outputSelector) {
+        this.copyButton = $(copyButtonSelector);
+        this.pasteButton = $(pasteButtonSelector);
+        this.inputElement = $(inputSelector);
+        this.outputElement = $(outputSelector);
+        this.setupEventListeners();
+    }
+
+    // 이벤트 리스너 설정
+    setupEventListeners() {
+        this.copyButton.click(() => this.copyToClipboard());
+        this.pasteButton.click(() => this.pasteFromClipboard());
+    }
+
+    // 클립보드로 복사
+    async copyToClipboard() {
+        try {
+            const visibleText = this.getVisibleText(this.outputElement);
+            await navigator.clipboard.writeText(visibleText);
+            this.showConfirmation('copy');
+        } catch (error) {
+            console.error('복사 실패:', error);
         }
     }
 
-    $('#wrapBracket').click(function () {
-        wrapTextWithBrackets('(', ')');
-    });
-
-    $('#wrapSmallQuoteBracket').click(function () {
-        wrapTextWithBrackets('‘', '’');
-    });
-
-    $('#wrapQuoteBracket').click(function () {
-        wrapTextWithBrackets('“', '”');
-    });
-
-    $('#wrapTriangleBracket').click(function () {
-        wrapTextWithBrackets('〈', '〉');
-    });
-
-    $('#wrapDoubleTriangleBracket').click(function () {
-        wrapTextWithBrackets('《', '》');
-    });
-
-    $('#wrapCornerBracket').click(function () {
-        wrapTextWithBrackets('「', '」');
-    });
-
-    $('#wrapDoubleCornerBracket').click(function () {
-        wrapTextWithBrackets('『', '』');
-    });
-
-    // 하이라이트 부분 클릭 -> 원본 가져오기
-    $('#outputText').on('click', '.highlight', function () {
-        $(this).hide();
-        $(this).prev('.origin').show();
-    });
-
-    // 원본 클릭 -> 하이라이트 부분 가져오기
-    $('#outputText').on('click', '.origin', function () {
-        $(this).hide();
-        $(this).next('.highlight').show();
-    });
-
-    // 사용자에게 보여지는 부분만 글자 가져오기
-    function getVisibleText(element) {
-        return $(element).contents().filter(function () {
-            return this.nodeType === Node.TEXT_NODE || $(this).is(':visible');
-        }).map(function () {
-            if (this.nodeType === Node.TEXT_NODE) {
-                return this.nodeValue;
-            } else if ($(this).is('br')) {
-                return '\n';
-            } else {
-                return $(this).text();
-            }
-        }).get().join('');
+    //  클립보드에서 붙여넣기
+    async pasteFromClipboard() {
+        try {
+            const text = await navigator.clipboard.readText();
+            this.inputElement.val(text);
+            this.showConfirmation('paste');
+        } catch (error) {
+            console.error('붙여넣기 실패:', error);
+        }
     }
 
-    // 복사
-    $('#copy').click(function () {
-        var visibleText = getVisibleText($('#outputText'));
-        navigator.clipboard.writeText(visibleText).then(function () {
-            $('#copy').hide();
-            $('.copy-confirm').css('display', 'flex');  // 태그 보이기
-            setTimeout(function () {
-                $('.copy-confirm').hide();  // 3초 후 태그 숨기기
-                $('#copy').css('display', 'flex');
-            }, 2000);
-        }).catch(function (err) {
+    // 보이는 텍스트만 추출
+    getVisibleText(element) {
+        return element.contents()
+            .filter(function() {
+                return this.nodeType === Node.TEXT_NODE || $(this).is(':visible');
+            })
+            .map(function() {
+                if (this.nodeType === Node.TEXT_NODE) return this.nodeValue;
+                if ($(this).is('br')) return '\n';
+                return $(this).text();
+            })
+            .get()
+            .join('');
+    }
 
-        });
+    // 확인 메시지 표시
+    showConfirmation(action) {
+        const button = action === 'copy' ? this.copyButton : this.pasteButton;
+        const confirmClass = `.${action}-confirm`;
+
+        button.hide();
+        $(confirmClass).css('display', 'flex');
+        
+        setTimeout(() => {
+            $(confirmClass).hide();
+            button.css('display', 'flex');
+        }, 2000);
+    }
+}
+
+// 문서 로드 완료 시 초기화
+$(document).ready(function() {
+    const textProcessor = new TextProcessor('#inputText', '#outputText');
+    const clipboardManager = new ClipboardManager('#copy', '#paste', '#inputText', '#outputText');
+
+    // 버튼 이벤트 바인딩
+    $('#grammar').click(() => textProcessor.checkGrammar());
+    $('#combination').click(() => textProcessor.convertSpecialCharacters());
+
+    // 드레그한 텍스트 감싸는 괄호 변환 버튼들 바인딩
+    Object.entries(SPECIAL_CHAR_MAPPINGS.brackets).forEach(([type, brackets]) => {
+        $(`#wrap${type.charAt(0).toUpperCase() + type.slice(1)}Bracket`).click(() => 
+            textProcessor.wrapWithBrackets(brackets.open, brackets.close)
+        );
     });
-
-    // 붙여넣기
-    $('#paste').click(function () {
-        navigator.clipboard.readText().then(function (text) {
-            $('#inputText').val(text);
-            $('#paste').hide();
-            $('.paste-confirm').css('display', 'flex');  // 태그 보이기
-            setTimeout(function () {
-                $('.paste-confirm').hide();  // 3초 후 태그 숨기기
-                $('#paste').css('display', 'flex');
-            }, 2000);
-        }).catch(function (err) {
-
-        });
+    
+    // 특정 기호 규정에 맞게 변환 버튼들 바인딩
+    Object.entries(SPECIAL_CHAR_MAPPINGS.regExpBrackets).forEach(([type]) => {
+        $(`#${type}Bracket`).click(() => 
+            textProcessor.convertSign(type)
+        );
     });
 });

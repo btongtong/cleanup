@@ -1,4 +1,4 @@
-export const errorMsg = {
+const errorMsg = {
     spellingError: "맞춤법 교정에 실패하였습니다.",
     dragError: "감싸고 싶은 부분을 먼저 드래그해주세요.",
     fillOutError: "모든 항목을 작성해주세요.",
@@ -15,3 +15,5 @@ export const errorMsg = {
     passwordWrongError: "비밀번호 인증에 실패하였습니다.",
     serverError: "나중에 다시 시도해주세요."
 }
+
+export { errorMsg }
