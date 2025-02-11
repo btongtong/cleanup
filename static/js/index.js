@@ -5,8 +5,8 @@ const SPECIAL_CHAR_MAPPINGS = {
     regExpBrackets: {
         smallQuote: { regExp: /['‘]([^'‘’]+)['’]/g, open: '‘', close: '’' },
         quote: { regExp: /["“]([^"“”]+)["”]/g, open: '“', close: '”' },
-        triangle: { regExp: /<([^>]+)>/g, open: '〈', close: '〉' },
-        doubleTriangle: { regExp: /<<([^>]+)>>/g, open: '《', close: '》' },
+        triangle: { regExp: /[<〈]([^>]+)[>〉]/g, open: '〈', close: '〉' },
+        doubleTriangle: { regExp: /<<|《([^>]+)>>|》/g, open: '《', close: '》' },
         corner: { regExp: /[r厂■]([^\s]*)[Jj丄□]/g, open: '「', close: '」' },
         doubleCorner: { regExp: /[r厂■「]([^\s]*)[Jj丄□」]/g, open: '『', close: '』' }
     },
