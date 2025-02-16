@@ -1,5 +1,6 @@
 export const url = {
     getPosts: () => `/posts`,
+    getSearchPosts: (searchWord) => `/posts?title=${searchWord}`,
     getPost: (pid) => `/posts/${pid}`,
     savePost: () => `/post/new`,
     modifyPost: (pid) => `/posts/${pid}/edit`,

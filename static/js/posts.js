@@ -9,7 +9,7 @@ $(document).ready(function () {
     // 검색 버튼 클릭
     $('.search-btn').click(function () {
         var searchWord = $('.search-input').val();
-        window.location.href = '/posts?title='+searchWord;
+        window.location.href = url.getSearchPosts(searchWord);
     })
 
     const paginationDivs = document.querySelectorAll('.pagination .prev, .pagination .next, .pagination .number-box div');
