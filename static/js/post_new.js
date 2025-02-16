@@ -2,8 +2,8 @@ import { url } from "./url.js";
 import { savePost } from "./post_api.js";
 import { errorMsg } from "./error_message.js";
 import { isValidPassword } from "./password.js";
-import { saveImage, deleteImage } from "./file_api.js";
-import { createNoContentElement, createImageElement } from "./post_elements.js";
+import { uploadImage, removeImage } from "./file.js";
+import { createNoContentElement } from "./post_elements.js";
 
 $(document).ready(function () {
     var uploadedImages = [];  // 업로드된 이미지 URL을 저장하는 배열
@@ -84,73 +84,10 @@ $(document).ready(function () {
     $('#imageUpload').on('change', function() {
         const file = this.files[0];
         if (file) {
-            uploadImage(file);
+            // 업로드 이미지 저장
+            uploadImage(file, uploadedImages);
             // 인풋 초기화
             $(this).val('');
         }
     });
-
-    // 이미지 업로드 함수
-    function uploadImage(file) {
-        var data = new FormData();
-        data.append('image', file);
-
-        saveImage(
-            data,
-            (response) => {
-                const url = response.url;
-                // 이미지 넣기
-                insertImage(createImageElement(url));
-                // 업로드된 이미지 URL 배열에 추가
-                uploadedImages.push(url);
-            },
-            (response) => alert(errorMsg.imageUploadError)
-        );
-    }
-
-    // 이미지를 특정 <p> 태그 내에 삽입하는 함수
-    function insertImage(imageHtml) {
-        const selection = window.getSelection();
-        if (selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            const node = range.startContainer;
-
-            // 입력 커서가 위치한 <p> 태그를 찾기
-            let targetP = null;
-            if (node.nodeName === '#text') {
-                targetP = $(node.parentNode);
-            } else if (node.nodeName === 'P') {
-                targetP = $(node);
-            } 
-
-            if (targetP.length > 0) {
-                targetP.append(imageHtml);
-
-                // 추가된 이미지 요소를 찾아서 그 다음에 커서를 위치
-                const imgElement = $(targetP).find('img:last');
-                if(imgElement.length > 0) {
-                    const newRange = document.createRange();
-                    newRange.setStartAfter(imgElement[0]);
-                    newRange.collapse(true);
-                    selection.removeAllRanges();
-                    selection.addRange(newRange);
-                }
-            }
-        } else {
-            // 포커스가 없는 경우 placeholder 처리
-            const placeholder = $('.editor .placeholder');
-            if (placeholder.length > 0) {
-                placeholder.remove();
-                $('.editor').html('<p>'+imageHtml+'</p>');
-            }
-        }
-    }
-
-    function removeImage(url){
-        deleteImage(
-            encodeURIComponent(url),
-            (response) => {},
-            (response) => alert(errorMsg.imageDeleteError)
-        );
-    }
 })
