@@ -29,8 +29,7 @@ class DBModule:
         posts = self.db.child("posts").get()
 
         if posts.val():
-            posts_dict = posts.val()
-            filtered_posts = {k: v for k, v in posts_dict.items() if title.lower() in v['title'].lower()}
+            filtered_posts = {k: v for k, v in posts.val().items() if title.lower() in v['title'].lower()}
             sorted_posts = sorted(filtered_posts.items(), key=lambda x: x[1]['datetime'], reverse=True)
             start = (page - 1) * per_page
             end = start + per_page

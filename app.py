@@ -79,7 +79,7 @@ def check_comment_password(pid, cid):
     hashed_password = comment['password'].encode('utf-8')
 
     if bcrypt.checkpw(password, hashed_password):
-        session['cid'] = pid
+        session['cid'] = cid
         return jsonify({'success': True, 'message': 'Password is correct'})
     else:
         return jsonify({'success': False, 'message': 'Password is not correct'})
